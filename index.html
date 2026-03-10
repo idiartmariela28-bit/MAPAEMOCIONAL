@@ -190,10 +190,9 @@
         { label: "Injusticia", value: counts?.injusticia || 0, color: "#10b981" }
       ];
 
-      const size = 320;
-      const cx = 160;
-      const cy = 160;
-      const maxR = 95;
+      const cx = 220;
+      const cy = 220;
+      const maxR = 145;
       const levels = 5;
       const maxValue = 10;
 
@@ -212,18 +211,18 @@
       }).join(" ");
 
       return (
-        <div className="bg-slate-50 rounded-[3rem] p-6 border-2 border-slate-100 shadow-sm">
-          <div className="text-left mb-4">
+        <div className="bg-slate-50 rounded-[3rem] p-8 md:p-10 border-2 border-slate-100 shadow-sm">
+          <div className="text-center mb-6">
             <div className="text-sm font-black uppercase tracking-widest text-slate-400">
               Tu huella emocional
             </div>
-            <div className="text-xl font-black text-slate-900">
-              Gráfico radar de heridas
+            <div className="text-2xl md:text-3xl font-black text-slate-900 mt-1">
+              Radar de heridas
             </div>
           </div>
 
           <div className="flex justify-center">
-            <svg viewBox="0 0 320 320" className="w-full max-w-[320px] h-auto">
+            <svg viewBox="0 0 440 440" className="w-full max-w-[440px] h-auto overflow-visible">
               {[1, 2, 3, 4, 5].map((level) => {
                 const r = (level / levels) * maxR;
                 const points = data.map((_, i) => {
@@ -238,7 +237,7 @@
                     points={points}
                     fill="none"
                     stroke="#cbd5e1"
-                    strokeWidth="1"
+                    strokeWidth="1.5"
                   />
                 );
               })}
@@ -253,7 +252,7 @@
                     x2={p.x}
                     y2={p.y}
                     stroke="#cbd5e1"
-                    strokeWidth="1"
+                    strokeWidth="1.5"
                   />
                 );
               })}
@@ -261,9 +260,9 @@
               <polygon
                 points={polygonPoints}
                 fill="#6366f1"
-                fillOpacity="0.28"
-                stroke="#6366f1"
-                strokeWidth="3"
+                fillOpacity="0.30"
+                stroke="#4338ca"
+                strokeWidth="4"
               />
 
               {data.map((d, i) => {
@@ -273,15 +272,15 @@
                     key={d.label}
                     cx={p.x}
                     cy={p.y}
-                    r="5"
-                    fill="#6366f1"
+                    r="6"
+                    fill="#4338ca"
                   />
                 );
               })}
 
               {data.map((d, i) => {
                 const angle = (-Math.PI / 2) + (i * 2 * Math.PI / data.length);
-                const labelR = maxR + 28;
+                const labelR = maxR + 38;
                 const x = cx + Math.cos(angle) * labelR;
                 const y = cy + Math.sin(angle) * labelR;
 
@@ -292,9 +291,9 @@
                     y={y}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fontSize="12"
-                    fontWeight="700"
-                    fill="#475569"
+                    fontSize="15"
+                    fontWeight="800"
+                    fill="#334155"
                   >
                     {d.label}
                   </text>
@@ -302,25 +301,63 @@
               })}
             </svg>
           </div>
+        </div>
+      );
+    }
 
-          <div className="grid grid-cols-1 gap-3 mt-5">
-            {data.map((d) => (
-              <div key={d.label}>
-                <div className="flex justify-between text-sm font-bold text-slate-600 mb-1">
-                  <span>{d.label}</span>
-                  <span>{d.value}/10</span>
-                </div>
-                <div className="w-full h-3 bg-white rounded-full overflow-hidden border border-slate-200">
-                  <div
-                    className="h-full rounded-full"
-                    style={{
-                      width: `${(d.value / 10) * 100}%`,
-                      backgroundColor: d.color
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
+    function ResultSummary({ counts }) {
+      const sorted = Object.entries(counts)
+        .sort((a, b) => b[1] - a[1])
+        .map(([key, value]) => ({
+          key,
+          value,
+          name: WOUNDS_CONFIG[key].name,
+          color: WOUNDS_CONFIG[key].color
+        }));
+
+      const main = sorted[0];
+      const secondary = sorted[1];
+
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+          <div className="bg-white rounded-[2rem] border border-slate-100 p-6 shadow-sm">
+            <div className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
+              Herida dominante
+            </div>
+            <div className="text-2xl font-black text-slate-900">{main.name}</div>
+            <div
+              className="mt-3 h-2 rounded-full"
+              style={{ backgroundColor: main.color }}
+            ></div>
+            <div className="mt-3 text-sm font-bold text-slate-500">
+              Puntaje: {main.value}/10
+            </div>
+          </div>
+
+          <div className="bg-white rounded-[2rem] border border-slate-100 p-6 shadow-sm">
+            <div className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
+              Herida secundaria
+            </div>
+            <div className="text-2xl font-black text-slate-900">{secondary.name}</div>
+            <div
+              className="mt-3 h-2 rounded-full"
+              style={{ backgroundColor: secondary.color }}
+            ></div>
+            <div className="mt-3 text-sm font-bold text-slate-500">
+              Puntaje: {secondary.value}/10
+            </div>
+          </div>
+
+          <div className="bg-white rounded-[2rem] border border-slate-100 p-6 shadow-sm">
+            <div className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
+              Respuesta biológica
+            </div>
+            <div className="text-2xl font-black text-slate-900">
+              {WOUNDS_CONFIG[main.key].survivalResponse}
+            </div>
+            <div className="mt-3 text-sm font-medium text-slate-500 leading-relaxed">
+              {WOUNDS_CONFIG[main.key].survivalDesc}
+            </div>
           </div>
         </div>
       );
@@ -492,28 +529,7 @@
 
             <RadarSimple counts={results.counts} />
 
-            <div className="bg-slate-50 rounded-[3rem] p-8 border-2 border-slate-100 text-left">
-              <div className="font-black text-slate-900 text-lg mb-4">Intensidad detectada</div>
-              <div className="space-y-4">
-                {Object.entries(results.counts).map(([key, value]) => (
-                  <div key={key}>
-                    <div className="flex justify-between text-sm font-bold text-slate-600 mb-1">
-                      <span>{WOUNDS_CONFIG[key].name}</span>
-                      <span>{value}</span>
-                    </div>
-                    <div className="w-full h-3 bg-white rounded-full overflow-hidden border border-slate-200">
-                      <div
-                        className="h-full rounded-full"
-                        style={{
-                          width: `${(value / SCENARIOS[scope].length) * 100}%`,
-                          backgroundColor: WOUNDS_CONFIG[key].color
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <ResultSummary counts={results.counts} />
 
             <div className="grid gap-4 pb-8">
               <ActionButton onClick={() => setView("longExplanation")} variant="secondary">
@@ -696,4 +712,3 @@
   </script>
 </body>
 </html>
-
