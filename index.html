@@ -1,20 +1,16 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mapa Emocional</title>
-
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
-
   <style>
     body { background: #f8fafc; }
-    .animate-fade-in { animation: fadeIn .35s ease; }
+    .fade-in { animation: fadeIn .3s ease; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
@@ -25,26 +21,7 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect, useMemo } = React;
-    const {
-      RadarChart,
-      Radar,
-      PolarGrid,
-      PolarAngleAxis,
-      ResponsiveContainer
-    } = Recharts;
-
-    function cn(...classes) {
-      return classes.filter(Boolean).join(" ");
-    }
-
-    function Icon({ children, className = "" }) {
-      return (
-        <span className={cn("inline-flex items-center justify-center font-black", className)}>
-          {children}
-        </span>
-      );
-    }
+    const { useState, useEffect } = React;
 
     const WOUNDS_CONFIG = {
       rechazo: {
@@ -53,13 +30,13 @@
         survivalResponse: "Huir",
         survivalDesc: "Tu sistema nervioso entra en modo escape. Buscas desaparecer o disociarte para no sentir el dolor.",
         color: "#6366f1",
-        longDesc: "Esta herida golpea el derecho fundamental a EXISTIR. El adulto 'Huidizo' vive deseando ser visto pero aterrado de ser juzgado.",
-        genesis: "Se origina desde la concepción hasta el primer año, vinculado al progenitor del mismo sexo. Ocurre cuando el niño no se siente bienvenido o siente que su presencia es una carga.",
-        awareness: "Tu sanación comienza al validar que tienes derecho a ocupar espacio. El rechazo que temes afuera es el reflejo del rechazo que tú te das. Quedarte es tu mayor acto de libertad.",
-        fear: "El pánico a la invisibilidad o al desprecio total.",
+        longDesc: "Esta herida golpea el derecho fundamental a existir. El adulto huidizo vive deseando ser visto pero aterrado de ser juzgado.",
+        genesis: "Se origina desde la concepción hasta el primer año. El niño no se siente bienvenido o siente que su presencia es una carga.",
+        awareness: "Tu sanación comienza al validar que tienes derecho a ocupar espacio. Quedarte es tu mayor acto de libertad.",
+        fear: "La invisibilidad o el desprecio total.",
         healingKey: "Validar tu derecho a ocupar espacio físico y emocional.",
         oppositeAction: "Quedarte y ocupar tu espacio. Expresar tu opinión aunque sientas ganas de huir.",
-        reframe: "Merezco estar aquí. Mi existencia tiene un valor intrínseco."
+        reframe: "Merezco estar aquí. Mi existencia tiene valor."
       },
       abandono: {
         name: "Abandono",
@@ -67,13 +44,13 @@
         survivalResponse: "Reaccionar",
         survivalDesc: "Tu sistema nervioso busca conexión de forma ansiosa. Te vuelves demandante para asegurar que el otro no se vaya.",
         color: "#ec4899",
-        longDesc: "Nace de la falta de nutrición afectiva. El 'Dependiente' necesita el soporte de otros para sostener su propia valía.",
-        genesis: "Surge entre el primer y tercer año con el progenitor del sexo opuesto. Se da por una carencia real o percibida de apoyo. El niño siente que solo no sobrevivirá.",
-        awareness: "Tu hambre de atención es en realidad falta de auto-apoyo. Sanar es descubrir quién eres cuando nadie te mira y aprender a ser tu propio refugio seguro.",
-        fear: "La soledad / No ser suficiente para que alguien se quede.",
+        longDesc: "Nace de la falta de nutrición afectiva. El dependiente necesita el soporte de otros para sostener su propia valía.",
+        genesis: "Surge entre el primer y tercer año. El niño siente que solo no sobrevivirá.",
+        awareness: "Tu hambre de atención es en realidad falta de auto-apoyo.",
+        fear: "La soledad o no ser suficiente para que alguien se quede.",
         healingKey: "Autonomía emocional. Ser tu propio refugio.",
         oppositeAction: "Pasar tiempo a solas de calidad. Poner límites aunque temas que se vayan.",
-        reframe: "Yo me acompaño y me sostengo. Mi seguridad nace de mi propio centro."
+        reframe: "Yo me acompaño y me sostengo."
       },
       humillacion: {
         name: "Humillación",
@@ -81,13 +58,13 @@
         survivalResponse: "Paralizarse",
         survivalDesc: "Te bloqueas y absorbes el impacto. Te vuelves servicial, cargando con dolor ajeno para evitar la vergüenza.",
         color: "#f59e0b",
-        longDesc: "Es la herida de la LIBERTAD. Surge cuando el niño siente vergüenza de sus impulsos naturales ante sus padres.",
-        genesis: "Se despierta entre el primer y tercer año. Ocurre cuando un progenitor se avergüenza del niño o controla excesivamente su placer, tachándolo de sucio o vergonzoso.",
-        awareness: "Te has convertido en el salvador de todos para no mirar tu vergüenza. Sanar es entender que el placer no es un pecado, sino una necesidad lícita y digna.",
+        longDesc: "Es la herida de la libertad. Surge cuando el niño siente vergüenza de sus impulsos naturales.",
+        genesis: "Se despierta entre el primer y tercer año.",
+        awareness: "Sanar es entender que el placer no es un pecado.",
         fear: "La libertad de ser tú mismo sin censura social.",
-        healingKey: "Darse permiso para el placer y el descanso sin justificación.",
-        oppositeAction: "Priorizar una necesidad propia hoy. Decir NO a un favor que te agota.",
-        reframe: "Tengo derecho a disfrutar. Mi placer es sagrado."
+        healingKey: "Darse permiso para el placer y el descanso.",
+        oppositeAction: "Priorizar una necesidad propia hoy. Decir no a un favor que te agota.",
+        reframe: "Tengo derecho a disfrutar."
       },
       traicion: {
         name: "Traición",
@@ -95,13 +72,13 @@
         survivalResponse: "Reaccionar",
         survivalDesc: "Modo lucha. Tomas el mando de forma dominante para anticiparte a cualquier engaño o pérdida de poder.",
         color: "#ef4444",
-        longDesc: "Es la herida de la CONFIANZA. Se activa ante la manipulación percibida. El 'Controlador' quiere mostrarse fuerte.",
-        genesis: "Se desarrolla entre los dos y cuatro años con el progenitor del sexo opuesto. El niño sintió que su confianza fue violada por promesas incumplidas.",
-        awareness: "Tu control es un escudo contra la impotencia. Confiar no es asegurar que no te fallen, sino saber que tienes la fuerza para sobrevivir si sucede.",
-        fear: "La vulnerabilidad / Ser engañado o manipulado.",
-        healingKey: "Soltar la necesidad de control. Delegar y confiar.",
+        longDesc: "Es la herida de la confianza. El controlador quiere mostrarse fuerte.",
+        genesis: "Se desarrolla entre los dos y cuatro años.",
+        awareness: "Tu control es un escudo contra la impotencia.",
+        fear: "La vulnerabilidad o ser engañado.",
+        healingKey: "Soltar la necesidad de control.",
         oppositeAction: "Delegar una tarea importante. Tolerar la incertidumbre sin interrogar.",
-        reframe: "Confío en el flujo de la vida. Soy seguro incluso en la incertidumbre."
+        reframe: "Confío en el flujo de la vida."
       },
       injusticia: {
         name: "Injusticia",
@@ -109,10 +86,10 @@
         survivalResponse: "Paralizarse",
         survivalDesc: "Tu sistema se congela en la perfección. Te vuelves frío y cuadriculado para que ninguna emoción pueda dañarte.",
         color: "#10b981",
-        longDesc: "Es la herida del SENTIR. Surge ante la frialdad o exigencia parental. El 'Rígido' confunde amor con rendimiento.",
-        genesis: "Se manifiesta entre los cuatro y seis años con el progenitor del mismo sexo. El niño aprendió que solo vale por lo que hace o por lo bien que se comporta.",
-        awareness: "Has bloqueado tu sensibilidad para no sentirte imperfecto. Sanar es permitirte ser humano, caótico y vulnerable; entender que el error es donde reside la conexión.",
-        fear: "La imperfección / Ser juzgado como ineficiente.",
+        longDesc: "Es la herida del sentir. El rígido confunde amor con rendimiento.",
+        genesis: "Se manifiesta entre los cuatro y seis años.",
+        awareness: "Sanar es permitirte ser humano, caótico y vulnerable.",
+        fear: "La imperfección o ser juzgado como ineficiente.",
         healingKey: "Conectar con la sensibilidad. Permitirse el error.",
         oppositeAction: "Aceptar un error pequeño sin castigarte. Mostrar una emoción real.",
         reframe: "Soy humano y vulnerable. Mi valor no está en mis logros."
@@ -122,94 +99,74 @@
     const SCENARIOS = {
       personal: [
         { q: "Alguien critica una decisión que tomaste con mucha ilusión...", options: [{ t: "Me retiro y me callo", w: "rechazo" }, { t: "Busco que me entiendan desesperadamente", w: "abandono" }, { t: "Me siento culpable y pequeño", w: "humillacion" }, { t: "Ataco de vuelta cuestionando su vida", w: "traicion" }, { t: "Argumento lógicamente por qué es perfecta", w: "injusticia" }] },
-        { q: "Ves una foto de amigos en una reunión donde no fuiste invitado...", options: [{ t: "Mejor, no quería ir de todos modos", w: "rechazo" }, { t: "Me siento solo y excluido", w: "abandono" }, { t: "Seguro se están riendo de mí", w: "humillacion" }, { t: "Lo planearon a propósito para molestarme", w: "traicion" }, { t: "Es una falta de ética y respeto social", w: "injusticia" }] },
-        { q: "Te dan un reconocimiento público por algo que hiciste...", options: [{ t: "Quisiera ser invisible ahora mismo", w: "rechazo" }, { t: "Si no me felicitan todos, me entristezco", w: "abandono" }, { t: "Pienso que no merezco tanto crédito", w: "humillacion" }, { t: "Pienso que me lo dan por algún interés", w: "traicion" }, { t: "Analizo si el premio es justo y exacto", w: "injusticia" }] },
-        { q: "Un amigo tarda 2 días en contestar un mensaje tuyo...", options: [{ t: "Ya no le intereso, no vuelvo a escribir", w: "rechazo" }, { t: "Reviso si hice algo mal para que se aleje", w: "abandono" }, { t: "Me siento ignorado y ridículo", w: "humillacion" }, { t: "Me está manipulando con el silencio", w: "traicion" }, { t: "Es una conducta informal e incorrecta", w: "injusticia" }] },
-        { q: "Alguien te dice que te ve muy bien y radiante...", options: [{ t: "Cambio de tema rápidamente", w: "rechazo" }, { t: "Necesito que me lo diga más veces", w: "abandono" }, { t: "Pienso que está exagerando o miente", w: "humillacion" }, { t: "Pienso que quiere pedirme un favor", w: "traicion" }, { t: "Intento corregir algún defecto que veo", w: "injusticia" }] },
-        { q: "Debes pedir dinero prestado por una urgencia real...", options: [{ t: "Prefiero sufrir solo antes que pedir", w: "rechazo" }, { t: "Me da pánico que me digan que no", w: "abandono" }, { t: "Me muero de la vergüenza al pedir", w: "humillacion" }, { t: "Me siento humillado al perder poder", w: "traicion" }, { t: "No debería haberme pasado esto, es un error", w: "injusticia" }] },
-        { q: "Un vecino te pide un favor que te quita mucho tiempo...", options: [{ t: "Digo que sí para evitar conflictos", w: "rechazo" }, { t: "Digo sí para que me valore y quiera", w: "abandono" }, { t: "Me sacrifico aunque me agote", w: "humillacion" }, { t: "Pienso cómo cobrárselo después", w: "traicion" }, { t: "Si es justo por norma, lo hago", w: "injusticia" }] },
-        { q: "Alguien te halaga efusivamente en público...", options: [{ t: "Quiero que pare ya mismo", w: "rechazo" }, { t: "Me encanta, quiero que todos oigan", w: "abandono" }, { t: "Me siento indigno del halago", w: "humillacion" }, { t: "Pienso qué beneficio busca", w: "traicion" }, { t: "Analizo si el halago es técnicamente exacto", w: "injusticia" }] },
-        { q: "Te equivocas de camino conduciendo con gente...", options: [{ t: "Me quedo mudo y tenso de estrés", w: "rechazo" }, { t: "Temo que se burlen o se harten", w: "abandono" }, { t: "Me siento el más tonto del mundo", w: "humillacion" }, { t: "Culpo al GPS o a las señales", w: "traicion" }, { t: "Me enfurezco por mi falta de precisión", w: "injusticia" }] },
-        { q: "Estás solo en casa un viernes por la noche...", options: [{ t: "Me siento aliviado; nadie me juzga", w: "rechazo" }, { t: "Siento un vacío insoportable", w: "abandono" }, { t: "Me pongo a limpiar para sentirme útil", w: "humillacion" }, { t: "Vigilo redes para ver qué hacen otros", w: "traicion" }, { t: "Organizo mi agenda rígidamente", w: "injusticia" }] }
+        { q: "Ves una foto de amigos en una reunión donde no fuiste invitado...", options: [{ t: "Mejor, no quería ir", w: "rechazo" }, { t: "Me siento solo y excluido", w: "abandono" }, { t: "Seguro se ríen de mí", w: "humillacion" }, { t: "Lo planearon a propósito", w: "traicion" }, { t: "Es una falta de ética", w: "injusticia" }] },
+        { q: "Te dan un reconocimiento público...", options: [{ t: "Quisiera ser invisible", w: "rechazo" }, { t: "Si no me felicitan todos, me entristezco", w: "abandono" }, { t: "No merezco tanto crédito", w: "humillacion" }, { t: "Me lo dan por interés", w: "traicion" }, { t: "Analizo si es justo", w: "injusticia" }] },
+        { q: "Un amigo tarda 2 días en contestar...", options: [{ t: "No vuelvo a escribir", w: "rechazo" }, { t: "Reviso si hice algo mal", w: "abandono" }, { t: "Me siento ridículo", w: "humillacion" }, { t: "Me manipula con el silencio", w: "traicion" }, { t: "Es incorrecto", w: "injusticia" }] },
+        { q: "Alguien te dice que te ve muy bien...", options: [{ t: "Cambio de tema", w: "rechazo" }, { t: "Necesito oírlo más veces", w: "abandono" }, { t: "Está exagerando", w: "humillacion" }, { t: "Quiere pedirme un favor", w: "traicion" }, { t: "Corrijo algún defecto", w: "injusticia" }] }
       ],
       pareja: [
-        { q: "Tu pareja te pide un tiempo para pensar...", options: [{ t: "Me alejo y no llamo nunca más", w: "rechazo" }, { t: "Suplico desesperadamente que se quede", w: "abandono" }, { t: "Me lo merezco por ser como soy", w: "humillacion" }, { t: "Pienso que tiene a otra persona", w: "traicion" }, { t: "Es una falta de eficiencia relacional", w: "injusticia" }] },
-        { q: "Tu pareja olvida tu plato favorito en una cena...", options: [{ t: "No digo nada y me cierro emocionalmente", w: "rechazo" }, { t: "Siento que ya no le intereso nada", w: "abandono" }, { t: "No soy lo bastante importante", w: "humillacion" }, { t: "Me está engañando con su atención", w: "traicion" }, { t: "Es injusto, yo recuerdo todo lo suyo", w: "injusticia" }] },
-        { q: "Tu pareja te dice que te ve muy guapo/a hoy...", options: [{ t: "Me siento incómodo y cambio de tema", w: "rechazo" }, { t: "Necesito que me lo repita más veces", w: "abandono" }, { t: "Lo dice por lástima o costumbre", w: "humillacion" }, { t: "Sospecho qué querrá conseguir de mí", w: "traicion" }, { t: "Analizo si mi aspecto es realmente impecable", w: "injusticia" }] },
-        { q: "Ves una llamada perdida de un ex en el móvil de tu pareja...", options: [{ t: "No pregunto y me distancio mudo", w: "rechazo" }, { t: "Me va a cambiar por alguien mejor", w: "abandono" }, { t: "El ex seguro es superior a mí", w: "humillacion" }, { t: "Exijo explicaciones inmediatas", w: "traicion" }, { t: "Es una violación de los términos de lealtad", w: "injusticia" }] },
-        { q: "Hay un silencio largo durante una comida...", options: [{ t: "Me hundo en mis pensamientos solitarios", w: "rechazo" }, { t: "Me aterra que no haya conexión", w: "abandono" }, { t: "Siento que soy aburrido y pesado", w: "humillacion" }, { t: "Me está ocultando un secreto", w: "traicion" }, { t: "La comunicación debe ser fluida y correcta", w: "injusticia" }] },
-        { q: "Tu pareja tiene un éxito laboral enorme...", options: [{ t: "Me alegro pero me siento pequeño", w: "rechazo" }, { t: "Temo que ahora ya no me necesite", w: "abandono" }, { t: "Siento envidia y luego vergüenza", w: "humillacion" }, { t: "Pienso cómo eso afecta a mi poder", w: "traicion" }, { t: "Es el resultado justo de su esfuerzo", w: "injusticia" }] },
-        { q: "Propones intimidad y tu pareja dice que está cansada...", options: [{ t: "Me siento rechazado y me alejo", w: "rechazo" }, { t: "Temo que ya no le atraigo nada", w: "abandono" }, { t: "Me siento degradado y ridículo", w: "humillacion" }, { t: "Pienso que lo hace con otro/a", w: "traicion" }, { t: "Es injusto, yo siempre estoy disponible", w: "injusticia" }] },
-        { q: "Tu pareja te critica el modo de gestionar el dinero...", options: [{ t: "No vuelvo a opinar de finanzas", w: "rechazo" }, { t: "Temo que peleemos y me deje", w: "abandono" }, { t: "Soy un desastre, tiene razón", w: "humillacion" }, { t: "Es un ataque a mi autonomía", w: "traicion" }, { t: "Mi método es el más equilibrado", w: "injusticia" }] },
-        { q: "Tu pareja está muy cariñosa hoy sin motivo...", options: [{ t: "Me siento invadido con tanto contacto", w: "rechazo" }, { t: "Me relajo, pero quiero que sea eterno", w: "abandono" }, { t: "Siento que no merezco tanto afecto", w: "humillacion" }, { t: "Sospecho si ha hecho algo malo", w: "traicion" }, { t: "Analizo si este afecto es proporcional", w: "injusticia" }] },
-        { q: "Tenéis una discusión y tu pareja se va a otra habitación...", options: [{ t: "Mejor así, prefiero mi soledad", w: "rechazo" }, { t: "Siento un pánico de abandono insoportable", w: "abandono" }, { t: "Seguro se ha cansado de mi torpeza", w: "humillacion" }, { t: "Pienso que me está castigando adrede", w: "traicion" }, { t: "No es la forma justa de debatir", w: "injusticia" }] }
+        { q: "Tu pareja te pide un tiempo para pensar...", options: [{ t: "Me alejo y no llamo más", w: "rechazo" }, { t: "Suplico que se quede", w: "abandono" }, { t: "Me lo merezco", w: "humillacion" }, { t: "Tiene a otra persona", w: "traicion" }, { t: "Es una falta de eficiencia relacional", w: "injusticia" }] },
+        { q: "Tu pareja olvida tu plato favorito...", options: [{ t: "No digo nada y me cierro", w: "rechazo" }, { t: "Ya no le intereso", w: "abandono" }, { t: "No soy importante", w: "humillacion" }, { t: "Me está engañando", w: "traicion" }, { t: "Es injusto", w: "injusticia" }] },
+        { q: "Tu pareja te dice que te ve muy bien...", options: [{ t: "Me incomoda", w: "rechazo" }, { t: "Quiero que lo repita", w: "abandono" }, { t: "Lo dice por lástima", w: "humillacion" }, { t: "Quiere conseguir algo", w: "traicion" }, { t: "Analizo si es exacto", w: "injusticia" }] },
+        { q: "Ves una llamada perdida de un ex...", options: [{ t: "No pregunto y me distancio", w: "rechazo" }, { t: "Me va a cambiar", w: "abandono" }, { t: "El ex es mejor que yo", w: "humillacion" }, { t: "Exijo explicaciones", w: "traicion" }, { t: "Se rompieron reglas de lealtad", w: "injusticia" }] },
+        { q: "Hay un silencio largo durante una comida...", options: [{ t: "Me hundo en mis pensamientos", w: "rechazo" }, { t: "Me aterra que no haya conexión", w: "abandono" }, { t: "Soy aburrido", w: "humillacion" }, { t: "Oculta un secreto", w: "traicion" }, { t: "La comunicación debería fluir", w: "injusticia" }] }
       ],
       laboral: [
-        { q: "Tu jefe pide corregir un trabajo delante de otros colegas...", options: [{ t: "Quiero renunciar de inmediato", w: "rechazo" }, { t: "Temo que ya no confíe en mí", w: "abandono" }, { t: "Me siento el más torpe del edificio", w: "humillacion" }, { t: "Quiere humillarme para ganar él", w: "traicion" }, { t: "Me enfurezco por mi falta de perfección", w: "injusticia" }] },
-        { q: "Un compañero asciende y tú no, habiendo trabajado igual...", options: [{ t: "No encajo en esta empresa", w: "rechazo" }, { t: "Me siento dejado de lado", w: "abandono" }, { t: "Todos ven mi fracaso patente", w: "humillacion" }, { t: "Hay favoritismos y traiciones internas", w: "traicion" }, { t: "Es una injusticia meritocrática clara", w: "injusticia" }] },
-        { q: "Te piden liderar una reunión estratégica...", options: [{ t: "Paso un estrés horrible por ser visto", w: "rechazo" }, { t: "Busco apoyo constante para no estar solo", w: "abandono" }, { t: "Temo hacer el ridículo y dar pena", w: "humillacion" }, { t: "Tomo el mando con mucha autoridad", w: "traicion" }, { t: "Debe ser una presentación impecable", w: "injusticia" }] },
-        { q: "Recibes un bono extra mayor que el de otros...", options: [{ t: "Siento que es un error de contabilidad", w: "rechazo" }, { t: "Me alegra sentirme valorado y útil", w: "abandono" }, { t: "Me da vergüenza frente a mis colegas", w: "humillacion" }, { t: "Sospecho qué interés hay detrás", w: "traicion" }, { t: "Es lo justo por mi alto rendimiento", w: "injusticia" }] },
-        { q: "Tu jefe no te saluda al entrar hoy por la mañana...", options: [{ t: "Mejor así, menos contacto social", w: "rechazo" }, { t: "He hecho algo mal, ya no me quiere", w: "abandono" }, { t: "Soy invisible para la empresa", w: "humillacion" }, { t: "Me está ninguneando a propósito", w: "traicion" }, { t: "Es una falta de profesionalidad total", w: "injusticia" }] },
-        { q: "Un subordinado comete un error grave bajo tu mando...", options: [{ t: "No le digo nada por no entrar en líos", w: "rechazo" }, { t: "Temo que si le regaño me odie", w: "abandono" }, { t: "Me siento responsable de su torpeza", w: "humillacion" }, { t: "Le vigilaré de cerca, ya no confío", w: "traicion" }, { t: "Debe haber una consecuencia justa", w: "injusticia" }] },
-        { q: "La empresa anuncia recortes de personal inminentes...", options: [{ t: "Me voy yo antes de que me echen", w: "rechazo" }, { t: "Me angustia perder mi familia laboral", w: "abandono" }, { t: "Seguro me toca a mí por inútil", w: "humillacion" }, { t: "Busco alianzas para que no me toquen", w: "traicion" }, { t: "Es injusto tras todo mi esfuerzo", w: "injusticia" }] },
-        { q: "Te asignan el proyecto más difícil del año...", options: [{ t: "Me siento abrumado y quiero huir", w: "rechazo" }, { t: "Espero que me feliciten mucho al acabar", w: "abandono" }, { t: "Siento que me están castigando", w: "humillacion" }, { t: "Es mi oportunidad de tener el control", w: "traicion" }, { t: "Debe ser ejecutado a la perfección", w: "injusticia" }] },
-        { q: "Un colega te cuenta un secreto de oficina prohibido...", options: [{ t: "Hago como que no sé nada de nada", w: "rechazo" }, { t: "Le ayudo para que confíe en mí", w: "abandono" }, { t: "Me siento mal por saber algo prohibido", w: "humillacion" }, { t: "Uso la información como poder futuro", w: "traicion" }, { t: "Analizo si es éticamente correcto", w: "injusticia" }] },
-        { q: "Te proponen un traslado a otra ciudad...", options: [{ t: "No quiero cambiar mi entorno seguro", w: "rechazo" }, { t: "Me da miedo perder mis vínculos aquí", w: "abandono" }, { t: "Haré el ridículo en un sitio nuevo", w: "humillacion" }, { t: "Negociaré el máximo poder allá", w: "traicion" }, { t: "Analizo si es un paso justo en mi carrera", w: "injusticia" }] }
+        { q: "Tu jefe pide corregir un trabajo delante de otros...", options: [{ t: "Quiero renunciar", w: "rechazo" }, { t: "Temo que ya no confíe en mí", w: "abandono" }, { t: "Soy el más torpe del edificio", w: "humillacion" }, { t: "Quiere humillarme", w: "traicion" }, { t: "Me enfurezco por no ser perfecto", w: "injusticia" }] },
+        { q: "Un compañero asciende y tú no...", options: [{ t: "No encajo en esta empresa", w: "rechazo" }, { t: "Me siento dejado de lado", w: "abandono" }, { t: "Todos ven mi fracaso", w: "humillacion" }, { t: "Hay favoritismos", w: "traicion" }, { t: "Es una injusticia meritocrática", w: "injusticia" }] },
+        { q: "Te piden liderar una reunión...", options: [{ t: "Paso un estrés horrible", w: "rechazo" }, { t: "Busco apoyo constante", w: "abandono" }, { t: "Temo hacer el ridículo", w: "humillacion" }, { t: "Tomo el mando con autoridad", w: "traicion" }, { t: "Debe ser impecable", w: "injusticia" }] },
+        { q: "Recibes un bono extra mayor...", options: [{ t: "Debe ser un error", w: "rechazo" }, { t: "Me gusta sentirme valorado", w: "abandono" }, { t: "Me da vergüenza", w: "humillacion" }, { t: "Qué interés hay detrás", w: "traicion" }, { t: "Es lo justo", w: "injusticia" }] },
+        { q: "Tu jefe no te saluda por la mañana...", options: [{ t: "Mejor así", w: "rechazo" }, { t: "Hice algo mal", w: "abandono" }, { t: "Soy invisible", w: "humillacion" }, { t: "Me ningunea a propósito", w: "traicion" }, { t: "Es poco profesional", w: "injusticia" }] }
       ]
     };
 
     const TEST_QUESTIONS = [
-      { q: "¿Cuánto dura aproximadamente el pico de química emocional antes de poder actuar racionalmente?", options: ["15 segundos", "90 segundos", "10 minutos"], correct: 1 },
-      { q: "¿Cuál es el objetivo principal del etiquetado cognitivo?", options: ["Sentir más la emoción", "Activar la corteza prefrontal", "Culpar a los demás"], correct: 1 },
-      { q: "Si mi respuesta biológica es Huir, ¿cuál es mi acción alternativa?", options: ["Correr más rápido", "Quedarme y ocupar mi espacio físico", "Ignorar a todo el mundo"], correct: 1 }
+      { q: "¿Cuánto dura el pico químico emocional antes de poder actuar con más claridad?", options: ["15 segundos", "90 segundos", "10 minutos"], correct: 1 },
+      { q: "¿Para qué sirve el etiquetado cognitivo?", options: ["Sentir más la emoción", "Activar la corteza prefrontal", "Culpar a los demás"], correct: 1 },
+      { q: "Si tu respuesta es huir, ¿cuál sería la acción alternativa?", options: ["Correr más rápido", "Quedarme y ocupar mi espacio", "Ignorar a todos"], correct: 1 }
     ];
 
-    const ActionButton = ({ onClick, children, className = "", variant = "primary" }) => {
-      const variants = {
-        primary: "bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-100",
-        secondary: "bg-slate-900 text-white hover:bg-black shadow-slate-200",
-        outline: "bg-white border-2 border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900",
-        ghost: "text-slate-500 hover:text-slate-900",
-        accent: "bg-indigo-50 border-indigo-100 text-indigo-700 hover:border-indigo-600"
+    function ActionButton({ onClick, children, variant = "primary" }) {
+      const styles = {
+        primary: "bg-indigo-600 text-white hover:bg-indigo-700",
+        secondary: "bg-slate-900 text-white hover:bg-black"
       };
       return (
         <button
           onClick={onClick}
-          className={cn(
-            "w-full p-5 rounded-[2rem] font-black text-lg flex items-center justify-center gap-3 transition-all active:scale-95 shadow-lg",
-            variants[variant],
-            className
-          )}
+          className={`w-full p-5 rounded-[1.8rem] font-black text-lg transition-all shadow-lg ${styles[variant]}`}
         >
           {children}
         </button>
       );
-    };
+    }
 
-    const InfoCard = ({ title, content, colorClass = "text-indigo-600", bgClass = "bg-white" }) => (
-      <div className={cn("p-8 rounded-[2rem] border border-slate-100 shadow-sm space-y-4", bgClass)}>
-        <div className={cn("font-black uppercase text-xs tracking-widest", colorClass)}>
-          {title}
+    function InfoCard({ title, content, dark }) {
+      return (
+        <div className={`p-7 rounded-[2rem] border shadow-sm ${dark ? "bg-indigo-600 border-indigo-600 text-white" : "bg-white border-slate-100 text-slate-700"}`}>
+          <div className={`font-black uppercase text-xs tracking-widest mb-3 ${dark ? "text-indigo-100" : "text-indigo-600"}`}>
+            {title}
+          </div>
+          <p className="leading-relaxed font-medium">{content}</p>
         </div>
-        <p className={cn("leading-relaxed font-medium", bgClass.includes("indigo") ? "text-indigo-50" : "text-slate-600")}>
-          {content}
-        </p>
-      </div>
-    );
+      );
+    }
 
-    const ProtocolStep = ({ stepNum, title, desc }) => (
-      <li className="flex gap-5 group">
-        <div className="w-11 h-11 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black text-lg shrink-0 group-hover:scale-110 transition-transform shadow-lg">
-          {stepNum}
-        </div>
-        <div>
-          <span className="font-black text-indigo-300 block mb-1 uppercase text-xs tracking-widest">{title}</span>
-          <p className="text-slate-300 leading-relaxed text-sm font-medium">{desc}</p>
-        </div>
-      </li>
-    );
+    function ProtocolStep({ num, title, desc }) {
+      return (
+        <li className="flex gap-4">
+          <div className="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black shrink-0">
+            {num}
+          </div>
+          <div>
+            <div className="font-black text-indigo-300 uppercase text-xs tracking-widest mb-1">{title}</div>
+            <div className="text-slate-300 text-sm leading-relaxed">{desc}</div>
+          </div>
+        </li>
+      );
+    }
 
-    function useEgoScan() {
+    function App() {
       const [view, setView] = useState("home");
       const [scope, setScope] = useState(null);
       const [step, setStep] = useState(0);
@@ -219,31 +176,33 @@
       const [testStep, setTestStep] = useState(0);
 
       useEffect(() => {
-        const saved = localStorage.getItem("egoscan_ultimate_v2");
+        const saved = localStorage.getItem("mapa_emocional_resultado");
         if (saved) {
           try { setResults(JSON.parse(saved)); } catch (e) {}
         }
       }, []);
 
-      const resetSession = () => {
+      function startQuiz(selectedScope) {
+        setScope(selectedScope);
+        setStep(0);
+        setAnswers([]);
+        setView("quiz");
+      }
+
+      function resetSession() {
         setScope(null);
         setStep(0);
         setAnswers([]);
         setTestScore(0);
         setTestStep(0);
         setView("home");
-      };
+      }
 
-      const startQuiz = (selectedScope) => {
-        setScope(selectedScope);
-        setStep(0);
-        setAnswers([]);
-        setView("quiz");
-      };
-
-      const processAnswer = (wound) => {
+      function processAnswer(wound) {
         const newAnswers = [...answers, wound];
-        if (step < SCENARIOS[scope].length - 1) {
+        const totalQuestions = SCENARIOS[scope].length;
+
+        if (step < totalQuestions - 1) {
           setAnswers(newAnswers);
           setStep(step + 1);
         } else {
@@ -254,17 +213,15 @@
           const finalRes = {
             main,
             counts,
-            date: new Date().toLocaleDateString(),
-            scope: scope.charAt(0).toUpperCase() + scope.slice(1),
-            allScores: Object.entries(counts).map(([k, v]) => ({ subject: WOUNDS_CONFIG[k].name, value: v }))
+            scope: scope
           };
           setResults(finalRes);
-          localStorage.setItem("egoscan_ultimate_v2", JSON.stringify(finalRes));
+          localStorage.setItem("mapa_emocional_resultado", JSON.stringify(finalRes));
           setView("results");
         }
-      };
+      }
 
-      const handleTest = (idx) => {
+      function handleTest(idx) {
         if (idx === TEST_QUESTIONS[testStep].correct) {
           setTestScore(prev => prev + 1);
         }
@@ -273,327 +230,304 @@
         } else {
           setView("testResults");
         }
-      };
+      }
 
-      return {
-        view, setView, scope, step, results, testScore, testStep,
-        resetSession, startQuiz, processAnswer, handleTest
-      };
-    }
+      const config = results ? WOUNDS_CONFIG[results.main] : null;
 
-    function App() {
-      const ego = useEgoScan();
-      const config = WOUNDS_CONFIG[ego.results?.main] || {};
-
-      const radarChart = useMemo(() => {
-        if (!ego.results?.allScores) return null;
+      function renderHome() {
         return (
-          <div className="h-80 bg-slate-50 rounded-[3rem] p-6 border-2 border-slate-100 flex items-center justify-center shadow-inner relative overflow-hidden">
-            <ResponsiveContainer width="100%" height="100%">
-              <RadarChart data={ego.results.allScores}>
-                <PolarGrid stroke="#cbd5e1" />
-                <PolarAngleAxis dataKey="subject" tick={{ fontSize: 12, fontWeight: 700, fill: "#64748b" }} />
-                <Radar
-                  dataKey="value"
-                  stroke={config.color || "#6366f1"}
-                  fill={config.color || "#6366f1"}
-                  fillOpacity={0.55}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
+          <div className="space-y-10 fade-in">
+            <div className="space-y-4">
+              <h1 className="text-5xl font-black text-slate-900 leading-none tracking-tight">
+                Tu Mapa <span className="text-indigo-600">Emocional</span>
+              </h1>
+              <p className="text-slate-500 text-xl font-medium leading-relaxed">
+                Detectá tu herida emocional dominante en escenarios reales de vida.
+              </p>
+            </div>
+
+            <div className="grid gap-4">
+              {[
+                { id: "personal", label: "Personal", emoji: "👤", color: "bg-indigo-50 border-indigo-100 text-indigo-700" },
+                { id: "pareja", label: "Pareja", emoji: "💗", color: "bg-pink-50 border-pink-100 text-pink-700" },
+                { id: "laboral", label: "Laboral", emoji: "💼", color: "bg-emerald-50 border-emerald-100 text-emerald-700" }
+              ].map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => startQuiz(item.id)}
+                  className={`p-8 border-2 rounded-[2.2rem] flex items-center justify-between shadow-sm ${item.color}`}
+                >
+                  <div className="flex items-center gap-5">
+                    <div className="p-4 bg-white rounded-2xl shadow-sm text-2xl">{item.emoji}</div>
+                    <div className="font-black text-2xl">{item.label}</div>
+                  </div>
+                  <div className="text-xl">→</div>
+                </button>
+              ))}
+            </div>
+
+            {results && (
+              <div className="p-6 bg-slate-50 rounded-3xl border border-slate-200 flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Último análisis</div>
+                  <div className="font-bold text-slate-700 uppercase italic">Herida de {results.main}</div>
+                </div>
+                <button onClick={() => setView("results")} className="text-indigo-600 font-bold text-sm underline">
+                  Ver de nuevo
+                </button>
+              </div>
+            )}
           </div>
         );
-      }, [ego.results]);
+      }
 
-      const renderView = () => {
-        switch (ego.view) {
-          case "home":
-            return (
-              <div className="space-y-10 animate-fade-in">
-                <div className="space-y-4">
-                  <h1 className="text-5xl font-black text-slate-900 leading-none tracking-tight">
-                    Tu Mapa <span className="text-indigo-600">Emocional</span>
-                  </h1>
-                  <p className="text-slate-500 text-xl font-medium leading-relaxed">
-                    Detectá tu herida y tu mecanismo de supervivencia biológico en 30 escenarios reales de vida.
-                  </p>
-                </div>
+      function renderQuiz() {
+        const scenario = SCENARIOS[scope][step];
+        const totalQuestions = SCENARIOS[scope].length;
 
-                <div className="grid grid-cols-1 gap-4">
-                  {[
-                    { id: "personal", label: "Personal", emoji: "👤", color: "bg-indigo-50 border-indigo-100 text-indigo-700" },
-                    { id: "pareja", label: "Pareja", emoji: "💗", color: "bg-pink-50 border-pink-100 text-pink-700" },
-                    { id: "laboral", label: "Laboral", emoji: "💼", color: "bg-emerald-50 border-emerald-100 text-emerald-700" }
-                  ].map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => ego.startQuiz(item.id)}
-                      className={cn("p-8 border-2 rounded-[2.5rem] flex items-center justify-between transition-all group shadow-sm", item.color)}
-                    >
-                      <div className="flex items-center gap-6">
-                        <div className="p-4 bg-white rounded-2xl shadow-sm group-hover:rotate-6 transition-transform text-2xl">
-                          {item.emoji}
-                        </div>
-                        <div className="font-black text-2xl tracking-tight">{item.label}</div>
-                      </div>
-                      <div className="text-xl">→</div>
-                    </button>
-                  ))}
-                </div>
-
-                {ego.results && (
-                  <div className="p-6 bg-slate-50 rounded-3xl border border-slate-200 flex items-center justify-between gap-4">
-                    <div className="text-left">
-                      <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Último análisis</div>
-                      <div className="font-bold text-slate-700 uppercase italic leading-none">Herida de {ego.results.main}</div>
-                    </div>
-                    <button onClick={() => ego.setView("results")} className="text-indigo-600 font-bold text-sm underline">
-                      Ver de nuevo
-                    </button>
-                  </div>
-                )}
+        return (
+          <div className="space-y-10 fade-in">
+            <div className="space-y-3">
+              <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                <span>{scope}</span>
+                <span>{step + 1} / {totalQuestions}</span>
               </div>
-            );
-
-          case "quiz":
-            const scenario = SCENARIOS[ego.scope][ego.step];
-            return (
-              <div className="space-y-10 animate-fade-in">
-                <div className="space-y-3">
-                  <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                    <span>{ego.scope}</span>
-                    <span>{ego.step + 1} / 10</span>
-                  </div>
-                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-slate-900 transition-all duration-700" style={{ width: `${((ego.step + 1) / 10) * 100}%` }}></div>
-                  </div>
-                </div>
-
-                <h2 className="text-3xl font-bold text-slate-800 leading-tight tracking-tight">{scenario.q}</h2>
-
-                <div className="space-y-3">
-                  {scenario.options.map((opt, i) => (
-                    <button
-                      key={i}
-                      onClick={() => ego.processAnswer(opt.w)}
-                      className="w-full text-left p-6 rounded-3xl border-2 border-slate-50 bg-slate-50/30 hover:border-slate-900 hover:bg-white transition-all text-base font-bold text-slate-700 flex gap-5 items-center group shadow-sm outline-none"
-                    >
-                      <span className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-xs font-black text-slate-300 group-hover:bg-slate-900 group-hover:text-white transition-all shadow-inner">
-                        {String.fromCharCode(65 + i)}
-                      </span>
-                      {opt.t}
-                    </button>
-                  ))}
-                </div>
+              <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-full bg-slate-900 transition-all duration-700" style={{ width: `${((step + 1) / totalQuestions) * 100}%` }}></div>
               </div>
-            );
+            </div>
 
-          case "results":
-            return (
-              <div className="space-y-10 animate-fade-in text-center">
-                <div className="space-y-3">
-                  <h2 className="text-5xl md:text-6xl font-black uppercase italic tracking-tighter text-slate-900 leading-none">
-                    HERIDA DE {config.name}
-                  </h2>
-                  <div className="flex flex-wrap justify-center gap-2 mt-4">
-                    <span className="px-4 py-1.5 bg-slate-100 text-slate-900 rounded-full text-xs font-black uppercase tracking-widest border border-slate-200">
-                      Máscara: {config.mask}
-                    </span>
-                    <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border bg-indigo-50 text-indigo-700 border-indigo-200">
-                      Respuesta: {config.survivalResponse}
-                    </span>
-                  </div>
-                </div>
+            <h2 className="text-3xl font-bold text-slate-800 leading-tight">{scenario.q}</h2>
 
-                {radarChart}
-
-                <div className="grid grid-cols-1 gap-4 pb-8">
-                  <ActionButton onClick={() => ego.setView("longExplanation")} variant="secondary">
-                    📘 Análisis profundo
-                  </ActionButton>
-                  <ActionButton onClick={() => ego.setView("awareness")}>
-                    ⚡ Método de las 2A
-                  </ActionButton>
-                </div>
-              </div>
-            );
-
-          case "longExplanation":
-            return (
-              <div className="space-y-10 animate-fade-in pb-16">
-                <button onClick={() => ego.setView("results")} className="text-slate-400 hover:text-slate-900 flex items-center gap-2 text-xs font-black uppercase tracking-widest transition-colors">
-                  ← Volver
+            <div className="space-y-3">
+              {scenario.options.map((opt, i) => (
+                <button
+                  key={i}
+                  onClick={() => processAnswer(opt.w)}
+                  className="w-full text-left p-6 rounded-3xl border-2 border-slate-50 bg-slate-50/30 hover:border-slate-900 hover:bg-white transition-all text-base font-bold text-slate-700 flex gap-5 items-center shadow-sm"
+                >
+                  <span className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-xs font-black text-slate-300 shadow-inner">
+                    {String.fromCharCode(65 + i)}
+                  </span>
+                  {opt.t}
                 </button>
+              ))}
+            </div>
+          </div>
+        );
+      }
 
-                <h2 className="text-5xl font-black text-slate-900 uppercase italic leading-none">
-                  Anatomía del {config.name}
-                </h2>
+      function renderResults() {
+        return (
+          <div className="space-y-10 fade-in text-center">
+            <div className="space-y-3">
+              <h2 className="text-5xl md:text-6xl font-black uppercase italic tracking-tighter text-slate-900 leading-none">
+                HERIDA DE {config.name}
+              </h2>
+              <div className="flex flex-wrap justify-center gap-2 mt-4">
+                <span className="px-4 py-1.5 bg-slate-100 text-slate-900 rounded-full text-xs font-black uppercase tracking-widest border border-slate-200">
+                  Máscara: {config.mask}
+                </span>
+                <span className="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border bg-indigo-50 text-indigo-700 border-indigo-200">
+                  Respuesta: {config.survivalResponse}
+                </span>
+              </div>
+            </div>
 
-                <div className="h-2 w-32 bg-indigo-600 rounded-full shadow-lg"></div>
-
-                <div className="p-8 md:p-10 bg-slate-50 rounded-[3rem] border-2 border-slate-100 space-y-8 shadow-sm">
-                  <div className="text-slate-700 text-xl leading-relaxed italic font-bold">
-                    “{config.longDesc}”
-                  </div>
-
-                  <InfoCard title="Génesis de la herida" content={config.genesis} colorClass="text-indigo-600" />
-                  <InfoCard title="Toma de consciencia" content={config.awareness} colorClass="text-indigo-200" bgClass="bg-indigo-600" />
-
-                  <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm border-l-8 border-l-indigo-500">
-                    <h4 className="text-sm font-black text-indigo-600 uppercase mb-2">
-                      Respuesta biológica: {config.survivalResponse}
-                    </h4>
-                    <p className="text-slate-600 font-medium italic">{config.survivalDesc}</p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 text-center">
-                    <div className="p-8 bg-white rounded-[2rem] border border-slate-100 shadow-sm space-y-3">
-                      <div className="text-red-500 font-black uppercase text-xs tracking-widest">Temor</div>
-                      <div className="text-2xl font-black text-slate-800 leading-tight">{config.fear}</div>
+            <div className="bg-slate-50 rounded-[3rem] p-8 border-2 border-slate-100 text-left">
+              <div className="font-black text-slate-900 text-lg mb-4">Intensidad detectada</div>
+              <div className="space-y-4">
+                {Object.entries(results.counts).map(([key, value]) => (
+                  <div key={key}>
+                    <div className="flex justify-between text-sm font-bold text-slate-600 mb-1">
+                      <span>{WOUNDS_CONFIG[key].name}</span>
+                      <span>{value}</span>
                     </div>
-                    <div className="p-8 bg-white rounded-[2rem] border border-slate-100 shadow-sm space-y-3">
-                      <div className="text-emerald-500 font-black uppercase text-xs tracking-widest">Sanación</div>
-                      <div className="text-2xl font-black text-slate-800 leading-tight">{config.healingKey}</div>
+                    <div className="w-full h-3 bg-white rounded-full overflow-hidden border border-slate-200">
+                      <div
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${(value / SCENARIOS[scope].length) * 100}%`,
+                          backgroundColor: WOUNDS_CONFIG[key].color
+                        }}
+                      ></div>
                     </div>
                   </div>
-                </div>
-
-                <ActionButton onClick={() => ego.setView("awareness")}>
-                  Ir al método 2A
-                </ActionButton>
+                ))}
               </div>
-            );
+            </div>
 
-          case "awareness":
-            return (
-              <div className="space-y-12 animate-fade-in pb-16">
-                <div className="space-y-4 text-center">
-                  <h2 className="text-5xl font-black text-slate-900 leading-tight uppercase italic">Método 2A</h2>
-                  <p className="text-slate-500 text-xl font-medium italic">
-                    Etiquetado Cognitivo y Acción Alternativa
-                  </p>
-                </div>
+            <div className="grid gap-4 pb-8">
+              <ActionButton onClick={() => setView("longExplanation")} variant="secondary">
+                📘 Análisis profundo
+              </ActionButton>
+              <ActionButton onClick={() => setView("awareness")}>
+                ⚡ Método de las 2A
+              </ActionButton>
+            </div>
+          </div>
+        );
+      }
 
-                <section className="p-8 md:p-10 border-2 border-slate-100 rounded-[3rem] bg-indigo-50/30 space-y-6 border-l-8 border-l-indigo-600">
-                  <div className="text-indigo-600 font-black text-sm uppercase tracking-widest">A de Autoconciencia</div>
-                  <h4 className="font-black text-3xl text-slate-900 leading-none">Detectar y etiquetar</h4>
-                  <p className="text-slate-600 text-lg font-medium leading-relaxed">
-                    Cuando sientas la activación biológica, frená y nombrala:
-                  </p>
-                  <div className="font-black text-indigo-600 text-2xl italic bg-white p-6 rounded-3xl shadow-inner border border-indigo-100 text-center">
-                    Mi {config.name} está hablando
-                  </div>
-                </section>
+      function renderLongExplanation() {
+        return (
+          <div className="space-y-10 fade-in pb-16">
+            <button onClick={() => setView("results")} className="text-slate-400 hover:text-slate-900 flex items-center gap-2 text-xs font-black uppercase tracking-widest">
+              ← Volver
+            </button>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-                    <div className="text-amber-500 font-black text-xs mb-2 uppercase">Emoción (biología)</div>
-                    <p className="text-sm text-slate-500 italic">Respuesta física inmediata, intensa y breve.</p>
-                  </div>
-                  <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-                    <div className="text-indigo-500 font-black text-xs mb-2 uppercase">Sentimiento (mente)</div>
-                    <p className="text-sm text-slate-500 italic">Emoción + pensamiento sostenido.</p>
-                  </div>
-                </div>
+            <h2 className="text-5xl font-black text-slate-900 uppercase italic leading-none">
+              Anatomía del {config.name}
+            </h2>
 
-                <section className="p-8 md:p-10 bg-slate-900 text-white rounded-[3rem] space-y-8 shadow-2xl">
-                  <div className="space-y-3">
-                    <h4 className="font-black text-indigo-400 tracking-[0.2em] uppercase text-sm">A de Acción Alternativa</h4>
-                    <p className="text-indigo-100 text-lg font-medium leading-relaxed">
-                      Reprogramación en 8 pasos:
-                    </p>
-                  </div>
+            <div className="h-2 w-32 bg-indigo-600 rounded-full shadow-lg"></div>
 
-                  <ul className="space-y-6 text-left">
-                    <ProtocolStep stepNum="1" title="Pausa de los 90s" desc="Esperá a que el disparo químico se disipe." />
-                    <ProtocolStep stepNum="2" title="Respiración coherente" desc="Señal biológica de seguridad al cuerpo." />
-                    <ProtocolStep stepNum="3" title="Etiquetado cognitivo" desc="Activá tu corteza prefrontal." />
-                    <ProtocolStep stepNum="4" title="Validación interna" desc="Tu niño tiene miedo y eso tiene lógica." />
-                    <ProtocolStep stepNum="5" title="Desafío al pensamiento" desc="Preguntate si es un hecho o una proyección." />
-                    <ProtocolStep stepNum="6" title="Acto opuesto" desc={`Acción: ${config.oppositeAction}`} />
-                    <ProtocolStep stepNum="7" title="Sostén de la sensación" desc="Tolera la incomodidad de hacer algo nuevo." />
-                    <ProtocolStep stepNum="8" title="Anclaje de victoria" desc="Celebrá tu consciencia, no la perfección." />
-                  </ul>
-                </section>
-
-                <ActionButton onClick={() => ego.setView("test")} variant="secondary">
-                  Test de integración →
-                </ActionButton>
+            <div className="p-8 md:p-10 bg-slate-50 rounded-[3rem] border-2 border-slate-100 space-y-8 shadow-sm">
+              <div className="text-slate-700 text-xl leading-relaxed italic font-bold">
+                “{config.longDesc}”
               </div>
-            );
 
-          case "test":
-            const tq = TEST_QUESTIONS[ego.testStep];
-            return (
-              <div className="space-y-12 animate-fade-in pb-16">
-                <div className="space-y-4 text-center">
-                  <h2 className="text-4xl font-black text-slate-900 uppercase italic">Test de integración</h2>
-                  <p className="text-slate-500 font-medium text-lg italic">
-                    ¿Sabés desarmar tu mecanismo de {config.survivalResponse}?
-                  </p>
+              <InfoCard title="Génesis de la herida" content={config.genesis} />
+              <InfoCard title="Toma de consciencia" content={config.awareness} dark />
+
+              <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm border-l-8 border-l-indigo-500">
+                <h4 className="text-sm font-black text-indigo-600 uppercase mb-2">
+                  Respuesta biológica: {config.survivalResponse}
+                </h4>
+                <p className="text-slate-600 font-medium italic">{config.survivalDesc}</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 text-center">
+                <div className="p-8 bg-white rounded-[2rem] border border-slate-100 shadow-sm space-y-3">
+                  <div className="text-red-500 font-black uppercase text-xs tracking-widest">Temor</div>
+                  <div className="text-2xl font-black text-slate-800 leading-tight">{config.fear}</div>
                 </div>
-
-                <div className="p-8 md:p-10 border-4 border-slate-50 rounded-[3rem] bg-slate-50/20 space-y-10 shadow-inner">
-                  <h3 className="text-3xl font-black text-slate-800 leading-none">{tq.q}</h3>
-                  <div className="grid grid-cols-1 gap-4">
-                    {tq.options.map((opt, i) => (
-                      <button
-                        key={i}
-                        onClick={() => ego.handleTest(i)}
-                        className="p-6 bg-white border-2 border-slate-100 rounded-3xl text-left text-lg font-bold text-slate-600 hover:border-indigo-600 hover:text-indigo-600 transition-all outline-none shadow-sm hover:shadow-md"
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
+                <div className="p-8 bg-white rounded-[2rem] border border-slate-100 shadow-sm space-y-3">
+                  <div className="text-emerald-500 font-black uppercase text-xs tracking-widest">Sanación</div>
+                  <div className="text-2xl font-black text-slate-800 leading-tight">{config.healingKey}</div>
                 </div>
               </div>
-            );
+            </div>
 
-          case "testResults":
-            return (
-              <div className="space-y-10 animate-fade-in text-center pb-20">
-                <div className="w-36 h-36 bg-indigo-600 rounded-full mx-auto flex items-center justify-center text-white shadow-2xl shadow-indigo-100 text-6xl">
-                  🏆
-                </div>
+            <ActionButton onClick={() => setView("awareness")}>Ir al método 2A</ActionButton>
+          </div>
+        );
+      }
 
-                <h2 className="text-5xl font-black text-slate-900 uppercase italic leading-none">
-                  ¡Maestría integrada!
-                </h2>
+      function renderAwareness() {
+        return (
+          <div className="space-y-12 fade-in pb-16">
+            <div className="space-y-4 text-center">
+              <h2 className="text-5xl font-black text-slate-900 leading-tight uppercase italic">Método 2A</h2>
+              <p className="text-slate-500 text-xl font-medium italic">Etiquetado cognitivo y acción alternativa</p>
+            </div>
 
-                <p className="text-2xl text-slate-500 font-bold">
-                  Dominaste {ego.testScore} de {TEST_QUESTIONS.length} conceptos.
-                </p>
-
-                <div className="p-8 bg-slate-900 text-white rounded-[3rem] shadow-2xl">
-                  <p className="text-2xl text-indigo-50 leading-relaxed font-medium italic">
-                    “La emoción es la brújula que apunta hacia tu herida, pero el registro es el mapa que te guía hacia tu libertad.”
-                  </p>
-                </div>
-
-                <div className="p-8 bg-emerald-50 rounded-3xl border border-emerald-100 text-emerald-800 font-bold text-lg italic shadow-sm">
-                  No registramos para controlar, sino para no ser controlados por lo desconocido.
-                </div>
-
-                <ActionButton onClick={ego.resetSession} variant="secondary">
-                  Cerrar sesión terapéutica
-                </ActionButton>
+            <section className="p-8 md:p-10 border-2 border-slate-100 rounded-[3rem] bg-indigo-50/30 space-y-6 border-l-8 border-l-indigo-600">
+              <div className="text-indigo-600 font-black text-sm uppercase tracking-widest">A de Autoconciencia</div>
+              <h4 className="font-black text-3xl text-slate-900 leading-none">Detectar y etiquetar</h4>
+              <p className="text-slate-600 text-lg font-medium leading-relaxed">
+                Cuando sientas la activación biológica, frená y nombrala:
+              </p>
+              <div className="font-black text-indigo-600 text-2xl italic bg-white p-6 rounded-3xl shadow-inner border border-indigo-100 text-center">
+                Mi {config.name} está hablando
               </div>
-            );
+            </section>
 
-          default:
-            return null;
-        }
-      };
+            <section className="p-8 md:p-10 bg-slate-900 text-white rounded-[3rem] space-y-8 shadow-2xl">
+              <div className="space-y-3">
+                <h4 className="font-black text-indigo-400 tracking-[0.2em] uppercase text-sm">A de Acción Alternativa</h4>
+                <p className="text-indigo-100 text-lg font-medium leading-relaxed">Reprogramación en 8 pasos:</p>
+              </div>
+
+              <ul className="space-y-6 text-left">
+                <ProtocolStep num="1" title="Pausa de los 90s" desc="Esperá a que el disparo químico se disipe." />
+                <ProtocolStep num="2" title="Respiración coherente" desc="Mandale seguridad al cuerpo." />
+                <ProtocolStep num="3" title="Etiquetado cognitivo" desc="Activá tu parte racional." />
+                <ProtocolStep num="4" title="Validación interna" desc="Tu miedo tiene historia. No sos ridícula por sentirlo." />
+                <ProtocolStep num="5" title="Desafío al pensamiento" desc="Preguntate si es un hecho o una proyección." />
+                <ProtocolStep num="6" title="Acto opuesto" desc={config.oppositeAction} />
+                <ProtocolStep num="7" title="Sostén de la sensación" desc="Tolera la incomodidad de hacer algo nuevo." />
+                <ProtocolStep num="8" title="Anclaje de victoria" desc="Celebrá tu consciencia, no la perfección." />
+              </ul>
+            </section>
+
+            <ActionButton onClick={() => setView("test")} variant="secondary">
+              Test de integración →
+            </ActionButton>
+          </div>
+        );
+      }
+
+      function renderTest() {
+        const tq = TEST_QUESTIONS[testStep];
+        return (
+          <div className="space-y-12 fade-in pb-16">
+            <div className="space-y-4 text-center">
+              <h2 className="text-4xl font-black text-slate-900 uppercase italic">Test de integración</h2>
+              <p className="text-slate-500 font-medium text-lg italic">
+                ¿Sabés desarmar tu mecanismo de {config.survivalResponse}?
+              </p>
+            </div>
+
+            <div className="p-8 md:p-10 border-4 border-slate-50 rounded-[3rem] bg-slate-50/20 space-y-10 shadow-inner">
+              <h3 className="text-3xl font-black text-slate-800 leading-none">{tq.q}</h3>
+              <div className="grid gap-4">
+                {tq.options.map((opt, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleTest(i)}
+                    className="p-6 bg-white border-2 border-slate-100 rounded-3xl text-left text-lg font-bold text-slate-600 hover:border-indigo-600 hover:text-indigo-600 transition-all shadow-sm"
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function renderTestResults() {
+        return (
+          <div className="space-y-10 fade-in text-center pb-20">
+            <div className="w-36 h-36 bg-indigo-600 rounded-full mx-auto flex items-center justify-center text-white shadow-2xl text-6xl">
+              🏆
+            </div>
+            <h2 className="text-5xl font-black text-slate-900 uppercase italic leading-none">
+              ¡Maestría integrada!
+            </h2>
+            <p className="text-2xl text-slate-500 font-bold">
+              Dominaste {testScore} de {TEST_QUESTIONS.length} conceptos.
+            </p>
+            <div className="p-8 bg-slate-900 text-white rounded-[3rem] shadow-2xl">
+              <p className="text-2xl text-indigo-50 leading-relaxed font-medium italic">
+                “La emoción es la brújula que apunta hacia tu herida, pero el registro es el mapa que te guía hacia tu libertad.”
+              </p>
+            </div>
+            <div className="p-8 bg-emerald-50 rounded-3xl border border-emerald-100 text-emerald-800 font-bold text-lg italic shadow-sm">
+              No registramos para controlar, sino para no ser controlados por lo desconocido.
+            </div>
+            <ActionButton onClick={resetSession} variant="secondary">
+              Cerrar sesión terapéutica
+            </ActionButton>
+          </div>
+        );
+      }
 
       return (
         <div className="w-full max-w-3xl mx-auto min-h-screen bg-white flex flex-col font-sans shadow-2xl overflow-x-hidden">
           <main className="flex-1 p-6 md:p-8">
-            {renderView()}
+            {view === "home" && renderHome()}
+            {view === "quiz" && renderQuiz()}
+            {view === "results" && results && renderResults()}
+            {view === "longExplanation" && results && renderLongExplanation()}
+            {view === "awareness" && results && renderAwareness()}
+            {view === "test" && results && renderTest()}
+            {view === "testResults" && results && renderTestResults()}
           </main>
           <footer className="p-8 text-center border-t border-slate-50 bg-slate-50/30">
             <p className="text-[10px] text-slate-300 font-black uppercase tracking-[0.4em]">
-              EgoScan Mastery • Bio-Consciencia • 2024
+              Mapa Emocional • Bio-Consciencia • 2026
             </p>
           </footer>
         </div>
