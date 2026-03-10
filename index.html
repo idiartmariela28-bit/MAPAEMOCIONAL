@@ -22,24 +22,17 @@
   <div id="root"></div>
 
   <script type="text/babel">
-   const { useState, useEffect, useMemo } = React;
+    const { useState, useEffect } = React;
 
-const {
-  RadarChart,
-  Radar,
-  PolarGrid,
-  PolarAngleAxis,
-  ResponsiveContainer
-} = Recharts;
-   
+    const {
+      RadarChart,
+      Radar,
+      PolarGrid,
+      PolarAngleAxis,
+      ResponsiveContainer
+    } = Recharts;
+
     const WOUNDS_CONFIG = {
-      const radarData = results ? [
-  { subject: "Rechazo", value: results.counts.rechazo },
-  { subject: "Abandono", value: results.counts.abandono },
-  { subject: "Humillación", value: results.counts.humillacion },
-  { subject: "Traición", value: results.counts.traicion },
-  { subject: "Injusticia", value: results.counts.injusticia }
-] : [];
       rechazo: {
         name: "Rechazo",
         mask: "Huidizo",
@@ -113,43 +106,43 @@ const {
     };
 
     const SCENARIOS = {
-  personal: [
-    { q: "Alguien critica una decisión que tomaste con mucha ilusión...", options: [{ t: "Me retiro y me callo", w: "rechazo" }, { t: "Busco que me entiendan desesperadamente", w: "abandono" }, { t: "Me siento culpable y pequeño", w: "humillacion" }, { t: "Ataco de vuelta cuestionando su vida", w: "traicion" }, { t: "Argumento lógicamente por qué es perfecta", w: "injusticia" }] },
-    { q: "Ves una foto de amigos en una reunión donde no fuiste invitado...", options: [{ t: "Mejor, no quería ir de todos modos", w: "rechazo" }, { t: "Me siento solo y excluido", w: "abandono" }, { t: "Seguro se están riendo de mí", w: "humillacion" }, { t: "Lo planearon a propósito para molestarme", w: "traicion" }, { t: "Es una falta de ética y respeto social", w: "injusticia" }] },
-    { q: "Te dan un reconocimiento público por algo que hiciste...", options: [{ t: "Quisiera ser invisible ahora mismo", w: "rechazo" }, { t: "Si no me felicitan todos, me entristezco", w: "abandono" }, { t: "Pienso que no merezco tanto crédito", w: "humillacion" }, { t: "Pienso que me lo dan por algún interés", w: "traicion" }, { t: "Analizo si el premio es justo y exacto", w: "injusticia" }] },
-    { q: "Un amigo tarda 2 días en contestar un mensaje tuyo...", options: [{ t: "Ya no le intereso, no vuelvo a escribir", w: "rechazo" }, { t: "Reviso si hice algo mal para que se aleje", w: "abandono" }, { t: "Me siento ignorado y ridículo", w: "humillacion" }, { t: "Me está manipulando con el silencio", w: "traicion" }, { t: "Es una conducta informal e incorrecta", w: "injusticia" }] },
-    { q: "Alguien te dice que te ve muy bien...", options: [{ t: "Cambio de tema rápidamente", w: "rechazo" }, { t: "Necesito que me lo diga más veces", w: "abandono" }, { t: "Pienso que está exagerando o miente", w: "humillacion" }, { t: "Pienso que quiere pedirme un favor", w: "traicion" }, { t: "Intento corregir algún defecto que veo", w: "injusticia" }] },
-    { q: "Debes pedir dinero prestado por una urgencia real...", options: [{ t: "Prefiero sufrir solo antes que pedir", w: "rechazo" }, { t: "Me da pánico que me digan que no", w: "abandono" }, { t: "Me muero de la vergüenza al pedir", w: "humillacion" }, { t: "Me siento humillado al perder poder", w: "traicion" }, { t: "No debería haberme pasado esto, es un error", w: "injusticia" }] },
-    { q: "Un vecino te pide un favor que te quita mucho tiempo...", options: [{ t: "Digo que sí para evitar conflictos", w: "rechazo" }, { t: "Digo sí para que me valore y quiera", w: "abandono" }, { t: "Me sacrifico aunque me agote", w: "humillacion" }, { t: "Pienso cómo cobrárselo después", w: "traicion" }, { t: "Si es justo por norma, lo hago", w: "injusticia" }] },
-    { q: "Alguien te halaga efusivamente en público...", options: [{ t: "Quiero que pare ya mismo", w: "rechazo" }, { t: "Me encanta, quiero que todos oigan", w: "abandono" }, { t: "Me siento indigno del halago", w: "humillacion" }, { t: "Pienso qué beneficio busca", w: "traicion" }, { t: "Analizo si el halago es técnicamente exacto", w: "injusticia" }] },
-    { q: "Te equivocas de camino conduciendo con gente...", options: [{ t: "Me quedo mudo y tenso de estrés", w: "rechazo" }, { t: "Temo que se burlen o se harten", w: "abandono" }, { t: "Me siento el más tonto del mundo", w: "humillacion" }, { t: "Culpo al GPS o a las señales", w: "traicion" }, { t: "Me enfurezco por mi falta de precisión", w: "injusticia" }] },
-    { q: "Estás solo en casa un viernes por la noche...", options: [{ t: "Me siento aliviado; nadie me juzga", w: "rechazo" }, { t: "Siento un vacío insoportable", w: "abandono" }, { t: "Me pongo a limpiar para sentirme útil", w: "humillacion" }, { t: "Vigilo redes para ver qué hacen otros", w: "traicion" }, { t: "Organizo mi agenda rígidamente", w: "injusticia" }] }
-  ],
-  pareja: [
-    { q: "Tu pareja te pide un tiempo para pensar...", options: [{ t: "Me alejo y no llamo nunca más", w: "rechazo" }, { t: "Suplico desesperadamente que se quede", w: "abandono" }, { t: "Me lo merezco por ser como soy", w: "humillacion" }, { t: "Pienso que tiene a otra persona", w: "traicion" }, { t: "Es una falta de eficiencia relacional", w: "injusticia" }] },
-    { q: "Tu pareja olvida tu plato favorito en una cena...", options: [{ t: "No digo nada y me cierro emocionalmente", w: "rechazo" }, { t: "Siento que ya no le intereso nada", w: "abandono" }, { t: "No soy lo bastante importante", w: "humillacion" }, { t: "Me está engañando con su atención", w: "traicion" }, { t: "Es injusto, yo recuerdo todo lo suyo", w: "injusticia" }] },
-    { q: "Tu pareja te dice que te ve muy bien hoy...", options: [{ t: "Me siento incómodo y cambio de tema", w: "rechazo" }, { t: "Necesito que me lo repita más veces", w: "abandono" }, { t: "Lo dice por lástima o costumbre", w: "humillacion" }, { t: "Sospecho qué querrá conseguir de mí", w: "traicion" }, { t: "Analizo si mi aspecto es realmente impecable", w: "injusticia" }] },
-    { q: "Ves una llamada perdida de un ex en el móvil de tu pareja...", options: [{ t: "No pregunto y me distancio mudo", w: "rechazo" }, { t: "Me va a cambiar por alguien mejor", w: "abandono" }, { t: "El ex seguro es superior a mí", w: "humillacion" }, { t: "Exijo explicaciones inmediatas", w: "traicion" }, { t: "Es una violación de los términos de lealtad", w: "injusticia" }] },
-    { q: "Hay un silencio largo durante una comida...", options: [{ t: "Me hundo en mis pensamientos solitarios", w: "rechazo" }, { t: "Me aterra que no haya conexión", w: "abandono" }, { t: "Siento que soy aburrido y pesado", w: "humillacion" }, { t: "Me está ocultando un secreto", w: "traicion" }, { t: "La comunicación debe ser fluida y correcta", w: "injusticia" }] },
-    { q: "Tu pareja tiene un éxito laboral enorme...", options: [{ t: "Me alegro pero me siento pequeño", w: "rechazo" }, { t: "Temo que ahora ya no me necesite", w: "abandono" }, { t: "Siento envidia y luego vergüenza", w: "humillacion" }, { t: "Pienso cómo eso afecta a mi poder", w: "traicion" }, { t: "Es el resultado justo de su esfuerzo", w: "injusticia" }] },
-    { q: "Proponés intimidad y tu pareja dice que está cansada...", options: [{ t: "Me siento rechazado y me alejo", w: "rechazo" }, { t: "Temo que ya no le atraigo nada", w: "abandono" }, { t: "Me siento degradado y ridículo", w: "humillacion" }, { t: "Pienso que lo hace con otro/a", w: "traicion" }, { t: "Es injusto, yo siempre estoy disponible", w: "injusticia" }] },
-    { q: "Tu pareja te critica el modo de gestionar el dinero...", options: [{ t: "No vuelvo a opinar de finanzas", w: "rechazo" }, { t: "Temo que peleemos y me deje", w: "abandono" }, { t: "Soy un desastre, tiene razón", w: "humillacion" }, { t: "Es un ataque a mi autonomía", w: "traicion" }, { t: "Mi método es el más equilibrado", w: "injusticia" }] },
-    { q: "Tu pareja está muy cariñosa hoy sin motivo...", options: [{ t: "Me siento invadido con tanto contacto", w: "rechazo" }, { t: "Me relajo, pero quiero que sea eterno", w: "abandono" }, { t: "Siento que no merezco tanto afecto", w: "humillacion" }, { t: "Sospecho si ha hecho algo malo", w: "traicion" }, { t: "Analizo si este afecto es proporcional", w: "injusticia" }] },
-    { q: "Tienen una discusión y tu pareja se va a otra habitación...", options: [{ t: "Mejor así, prefiero mi soledad", w: "rechazo" }, { t: "Siento un pánico de abandono insoportable", w: "abandono" }, { t: "Seguro se ha cansado de mi torpeza", w: "humillacion" }, { t: "Pienso que me está castigando adrede", w: "traicion" }, { t: "No es la forma justa de debatir", w: "injusticia" }] }
-  ],
-  laboral: [
-    { q: "Tu jefe pide corregir un trabajo delante de otros colegas...", options: [{ t: "Quiero renunciar de inmediato", w: "rechazo" }, { t: "Temo que ya no confíe en mí", w: "abandono" }, { t: "Me siento el más torpe del edificio", w: "humillacion" }, { t: "Quiere humillarme para ganar él", w: "traicion" }, { t: "Me enfurezco por mi falta de perfección", w: "injusticia" }] },
-    { q: "Un compañero asciende y tú no, habiendo trabajado igual...", options: [{ t: "No encajo en esta empresa", w: "rechazo" }, { t: "Me siento dejado de lado", w: "abandono" }, { t: "Todos ven mi fracaso patente", w: "humillacion" }, { t: "Hay favoritismos y traiciones internas", w: "traicion" }, { t: "Es una injusticia meritocrática clara", w: "injusticia" }] },
-    { q: "Te piden liderar una reunión estratégica...", options: [{ t: "Paso un estrés horrible por ser visto", w: "rechazo" }, { t: "Busco apoyo constante para no estar solo", w: "abandono" }, { t: "Temo hacer el ridículo y dar pena", w: "humillacion" }, { t: "Tomo el mando con mucha autoridad", w: "traicion" }, { t: "Debe ser una presentación impecable", w: "injusticia" }] },
-    { q: "Recibís un bono extra mayor que el de otros...", options: [{ t: "Siento que es un error de contabilidad", w: "rechazo" }, { t: "Me alegra sentirme valorado y útil", w: "abandono" }, { t: "Me da vergüenza frente a mis colegas", w: "humillacion" }, { t: "Sospecho qué interés hay detrás", w: "traicion" }, { t: "Es lo justo por mi alto rendimiento", w: "injusticia" }] },
-    { q: "Tu jefe no te saluda al entrar hoy por la mañana...", options: [{ t: "Mejor así, menos contacto social", w: "rechazo" }, { t: "He hecho algo mal, ya no me quiere", w: "abandono" }, { t: "Soy invisible para la empresa", w: "humillacion" }, { t: "Me está ninguneando a propósito", w: "traicion" }, { t: "Es una falta de profesionalidad total", w: "injusticia" }] },
-    { q: "Un subordinado comete un error grave bajo tu mando...", options: [{ t: "No le digo nada por no entrar en líos", w: "rechazo" }, { t: "Temo que si le regaño me odie", w: "abandono" }, { t: "Me siento responsable de su torpeza", w: "humillacion" }, { t: "Le vigilaré de cerca, ya no confío", w: "traicion" }, { t: "Debe haber una consecuencia justa", w: "injusticia" }] },
-    { q: "La empresa anuncia recortes de personal inminentes...", options: [{ t: "Me voy yo antes de que me echen", w: "rechazo" }, { t: "Me angustia perder mi familia laboral", w: "abandono" }, { t: "Seguro me toca a mí por inútil", w: "humillacion" }, { t: "Busco alianzas para que no me toquen", w: "traicion" }, { t: "Es injusto tras todo mi esfuerzo", w: "injusticia" }] },
-    { q: "Te asignan el proyecto más difícil del año...", options: [{ t: "Me siento abrumado y quiero huir", w: "rechazo" }, { t: "Espero que me feliciten mucho al acabar", w: "abandono" }, { t: "Siento que me están castigando", w: "humillacion" }, { t: "Es mi oportunidad de tener el control", w: "traicion" }, { t: "Debe ser ejecutado a la perfección", w: "injusticia" }] },
-    { q: "Un colega te cuenta un secreto de oficina prohibido...", options: [{ t: "Hago como que no sé nada de nada", w: "rechazo" }, { t: "Le ayudo para que confíe en mí", w: "abandono" }, { t: "Me siento mal por saber algo prohibido", w: "humillacion" }, { t: "Uso la información como poder futuro", w: "traicion" }, { t: "Analizo si es éticamente correcto", w: "injusticia" }] },
-    { q: "Te proponen un traslado a otra ciudad...", options: [{ t: "No quiero cambiar mi entorno seguro", w: "rechazo" }, { t: "Me da miedo perder mis vínculos aquí", w: "abandono" }, { t: "Haré el ridículo en un sitio nuevo", w: "humillacion" }, { t: "Negociaré el máximo poder allá", w: "traicion" }, { t: "Analizo si es un paso justo en mi carrera", w: "injusticia" }] }
-  ]
-};
+      personal: [
+        { q: "Alguien critica una decisión que tomaste con mucha ilusión...", options: [{ t: "Me retiro y me callo", w: "rechazo" }, { t: "Busco que me entiendan desesperadamente", w: "abandono" }, { t: "Me siento culpable y pequeño", w: "humillacion" }, { t: "Ataco de vuelta cuestionando su vida", w: "traicion" }, { t: "Argumento lógicamente por qué es perfecta", w: "injusticia" }] },
+        { q: "Ves una foto de amigos en una reunión donde no fuiste invitado...", options: [{ t: "Mejor, no quería ir de todos modos", w: "rechazo" }, { t: "Me siento solo y excluido", w: "abandono" }, { t: "Seguro se están riendo de mí", w: "humillacion" }, { t: "Lo planearon a propósito para molestarme", w: "traicion" }, { t: "Es una falta de ética y respeto social", w: "injusticia" }] },
+        { q: "Te dan un reconocimiento público por algo que hiciste...", options: [{ t: "Quisiera ser invisible ahora mismo", w: "rechazo" }, { t: "Si no me felicitan todos, me entristezco", w: "abandono" }, { t: "Pienso que no merezco tanto crédito", w: "humillacion" }, { t: "Pienso que me lo dan por algún interés", w: "traicion" }, { t: "Analizo si el premio es justo y exacto", w: "injusticia" }] },
+        { q: "Un amigo tarda 2 días en contestar un mensaje tuyo...", options: [{ t: "Ya no le intereso, no vuelvo a escribir", w: "rechazo" }, { t: "Reviso si hice algo mal para que se aleje", w: "abandono" }, { t: "Me siento ignorado y ridículo", w: "humillacion" }, { t: "Me está manipulando con el silencio", w: "traicion" }, { t: "Es una conducta informal e incorrecta", w: "injusticia" }] },
+        { q: "Alguien te dice que te ve muy bien...", options: [{ t: "Cambio de tema rápidamente", w: "rechazo" }, { t: "Necesito que me lo diga más veces", w: "abandono" }, { t: "Pienso que está exagerando o miente", w: "humillacion" }, { t: "Pienso que quiere pedirme un favor", w: "traicion" }, { t: "Intento corregir algún defecto que veo", w: "injusticia" }] },
+        { q: "Debes pedir dinero prestado por una urgencia real...", options: [{ t: "Prefiero sufrir solo antes que pedir", w: "rechazo" }, { t: "Me da pánico que me digan que no", w: "abandono" }, { t: "Me muero de la vergüenza al pedir", w: "humillacion" }, { t: "Me siento humillado al perder poder", w: "traicion" }, { t: "No debería haberme pasado esto, es un error", w: "injusticia" }] },
+        { q: "Un vecino te pide un favor que te quita mucho tiempo...", options: [{ t: "Digo que sí para evitar conflictos", w: "rechazo" }, { t: "Digo sí para que me valore y quiera", w: "abandono" }, { t: "Me sacrifico aunque me agote", w: "humillacion" }, { t: "Pienso cómo cobrárselo después", w: "traicion" }, { t: "Si es justo por norma, lo hago", w: "injusticia" }] },
+        { q: "Alguien te halaga efusivamente en público...", options: [{ t: "Quiero que pare ya mismo", w: "rechazo" }, { t: "Me encanta, quiero que todos oigan", w: "abandono" }, { t: "Me siento indigno del halago", w: "humillacion" }, { t: "Pienso qué beneficio busca", w: "traicion" }, { t: "Analizo si el halago es técnicamente exacto", w: "injusticia" }] },
+        { q: "Te equivocas de camino conduciendo con gente...", options: [{ t: "Me quedo mudo y tenso de estrés", w: "rechazo" }, { t: "Temo que se burlen o se harten", w: "abandono" }, { t: "Me siento el más tonto del mundo", w: "humillacion" }, { t: "Culpo al GPS o a las señales", w: "traicion" }, { t: "Me enfurezco por mi falta de precisión", w: "injusticia" }] },
+        { q: "Estás solo en casa un viernes por la noche...", options: [{ t: "Me siento aliviado; nadie me juzga", w: "rechazo" }, { t: "Siento un vacío insoportable", w: "abandono" }, { t: "Me pongo a limpiar para sentirme útil", w: "humillacion" }, { t: "Vigilo redes para ver qué hacen otros", w: "traicion" }, { t: "Organizo mi agenda rígidamente", w: "injusticia" }] }
+      ],
+      pareja: [
+        { q: "Tu pareja te pide un tiempo para pensar...", options: [{ t: "Me alejo y no llamo nunca más", w: "rechazo" }, { t: "Suplico desesperadamente que se quede", w: "abandono" }, { t: "Me lo merezco por ser como soy", w: "humillacion" }, { t: "Pienso que tiene a otra persona", w: "traicion" }, { t: "Es una falta de eficiencia relacional", w: "injusticia" }] },
+        { q: "Tu pareja olvida tu plato favorito en una cena...", options: [{ t: "No digo nada y me cierro emocionalmente", w: "rechazo" }, { t: "Siento que ya no le intereso nada", w: "abandono" }, { t: "No soy lo bastante importante", w: "humillacion" }, { t: "Me está engañando con su atención", w: "traicion" }, { t: "Es injusto, yo recuerdo todo lo suyo", w: "injusticia" }] },
+        { q: "Tu pareja te dice que te ve muy bien hoy...", options: [{ t: "Me siento incómodo y cambio de tema", w: "rechazo" }, { t: "Necesito que me lo repita más veces", w: "abandono" }, { t: "Lo dice por lástima o costumbre", w: "humillacion" }, { t: "Sospecho qué querrá conseguir de mí", w: "traicion" }, { t: "Analizo si mi aspecto es realmente impecable", w: "injusticia" }] },
+        { q: "Ves una llamada perdida de un ex en el móvil de tu pareja...", options: [{ t: "No pregunto y me distancio mudo", w: "rechazo" }, { t: "Me va a cambiar por alguien mejor", w: "abandono" }, { t: "El ex seguro es superior a mí", w: "humillacion" }, { t: "Exijo explicaciones inmediatas", w: "traicion" }, { t: "Es una violación de los términos de lealtad", w: "injusticia" }] },
+        { q: "Hay un silencio largo durante una comida...", options: [{ t: "Me hundo en mis pensamientos solitarios", w: "rechazo" }, { t: "Me aterra que no haya conexión", w: "abandono" }, { t: "Siento que soy aburrido y pesado", w: "humillacion" }, { t: "Me está ocultando un secreto", w: "traicion" }, { t: "La comunicación debe ser fluida y correcta", w: "injusticia" }] },
+        { q: "Tu pareja tiene un éxito laboral enorme...", options: [{ t: "Me alegro pero me siento pequeño", w: "rechazo" }, { t: "Temo que ahora ya no me necesite", w: "abandono" }, { t: "Siento envidia y luego vergüenza", w: "humillacion" }, { t: "Pienso cómo eso afecta a mi poder", w: "traicion" }, { t: "Es el resultado justo de su esfuerzo", w: "injusticia" }] },
+        { q: "Proponés intimidad y tu pareja dice que está cansada...", options: [{ t: "Me siento rechazado y me alejo", w: "rechazo" }, { t: "Temo que ya no le atraigo nada", w: "abandono" }, { t: "Me siento degradado y ridículo", w: "humillacion" }, { t: "Pienso que lo hace con otro/a", w: "traicion" }, { t: "Es injusto, yo siempre estoy disponible", w: "injusticia" }] },
+        { q: "Tu pareja te critica el modo de gestionar el dinero...", options: [{ t: "No vuelvo a opinar de finanzas", w: "rechazo" }, { t: "Temo que peleemos y me deje", w: "abandono" }, { t: "Soy un desastre, tiene razón", w: "humillacion" }, { t: "Es un ataque a mi autonomía", w: "traicion" }, { t: "Mi método es el más equilibrado", w: "injusticia" }] },
+        { q: "Tu pareja está muy cariñosa hoy sin motivo...", options: [{ t: "Me siento invadido con tanto contacto", w: "rechazo" }, { t: "Me relajo, pero quiero que sea eterno", w: "abandono" }, { t: "Siento que no merezco tanto afecto", w: "humillacion" }, { t: "Sospecho si ha hecho algo malo", w: "traicion" }, { t: "Analizo si este afecto es proporcional", w: "injusticia" }] },
+        { q: "Tienen una discusión y tu pareja se va a otra habitación...", options: [{ t: "Mejor así, prefiero mi soledad", w: "rechazo" }, { t: "Siento un pánico de abandono insoportable", w: "abandono" }, { t: "Seguro se ha cansado de mi torpeza", w: "humillacion" }, { t: "Pienso que me está castigando adrede", w: "traicion" }, { t: "No es la forma justa de debatir", w: "injusticia" }] }
+      ],
+      laboral: [
+        { q: "Tu jefe pide corregir un trabajo delante de otros colegas...", options: [{ t: "Quiero renunciar de inmediato", w: "rechazo" }, { t: "Temo que ya no confíe en mí", w: "abandono" }, { t: "Me siento el más torpe del edificio", w: "humillacion" }, { t: "Quiere humillarme para ganar él", w: "traicion" }, { t: "Me enfurezco por mi falta de perfección", w: "injusticia" }] },
+        { q: "Un compañero asciende y tú no, habiendo trabajado igual...", options: [{ t: "No encajo en esta empresa", w: "rechazo" }, { t: "Me siento dejado de lado", w: "abandono" }, { t: "Todos ven mi fracaso patente", w: "humillacion" }, { t: "Hay favoritismos y traiciones internas", w: "traicion" }, { t: "Es una injusticia meritocrática clara", w: "injusticia" }] },
+        { q: "Te piden liderar una reunión estratégica...", options: [{ t: "Paso un estrés horrible por ser visto", w: "rechazo" }, { t: "Busco apoyo constante para no estar solo", w: "abandono" }, { t: "Temo hacer el ridículo y dar pena", w: "humillacion" }, { t: "Tomo el mando con mucha autoridad", w: "traicion" }, { t: "Debe ser una presentación impecable", w: "injusticia" }] },
+        { q: "Recibís un bono extra mayor que el de otros...", options: [{ t: "Siento que es un error de contabilidad", w: "rechazo" }, { t: "Me alegra sentirme valorado y útil", w: "abandono" }, { t: "Me da vergüenza frente a mis colegas", w: "humillacion" }, { t: "Sospecho qué interés hay detrás", w: "traicion" }, { t: "Es lo justo por mi alto rendimiento", w: "injusticia" }] },
+        { q: "Tu jefe no te saluda al entrar hoy por la mañana...", options: [{ t: "Mejor así, menos contacto social", w: "rechazo" }, { t: "He hecho algo mal, ya no me quiere", w: "abandono" }, { t: "Soy invisible para la empresa", w: "humillacion" }, { t: "Me está ninguneando a propósito", w: "traicion" }, { t: "Es una falta de profesionalidad total", w: "injusticia" }] },
+        { q: "Un subordinado comete un error grave bajo tu mando...", options: [{ t: "No le digo nada por no entrar en líos", w: "rechazo" }, { t: "Temo que si le regaño me odie", w: "abandono" }, { t: "Me siento responsable de su torpeza", w: "humillacion" }, { t: "Le vigilaré de cerca, ya no confío", w: "traicion" }, { t: "Debe haber una consecuencia justa", w: "injusticia" }] },
+        { q: "La empresa anuncia recortes de personal inminentes...", options: [{ t: "Me voy yo antes de que me echen", w: "rechazo" }, { t: "Me angustia perder mi familia laboral", w: "abandono" }, { t: "Seguro me toca a mí por inútil", w: "humillacion" }, { t: "Busco alianzas para que no me toquen", w: "traicion" }, { t: "Es injusto tras todo mi esfuerzo", w: "injusticia" }] },
+        { q: "Te asignan el proyecto más difícil del año...", options: [{ t: "Me siento abrumado y quiero huir", w: "rechazo" }, { t: "Espero que me feliciten mucho al acabar", w: "abandono" }, { t: "Siento que me están castigando", w: "humillacion" }, { t: "Es mi oportunidad de tener el control", w: "traicion" }, { t: "Debe ser ejecutado a la perfección", w: "injusticia" }] },
+        { q: "Un colega te cuenta un secreto de oficina prohibido...", options: [{ t: "Hago como que no sé nada de nada", w: "rechazo" }, { t: "Le ayudo para que confíe en mí", w: "abandono" }, { t: "Me siento mal por saber algo prohibido", w: "humillacion" }, { t: "Uso la información como poder futuro", w: "traicion" }, { t: "Analizo si es éticamente correcto", w: "injusticia" }] },
+        { q: "Te proponen un traslado a otra ciudad...", options: [{ t: "No quiero cambiar mi entorno seguro", w: "rechazo" }, { t: "Me da miedo perder mis vínculos aquí", w: "abandono" }, { t: "Haré el ridículo en un sitio nuevo", w: "humillacion" }, { t: "Negociaré el máximo poder allá", w: "traicion" }, { t: "Analizo si es un paso justo en mi carrera", w: "injusticia" }] }
+      ]
+    };
 
     const TEST_QUESTIONS = [
       { q: "¿Cuánto dura el pico químico emocional antes de poder actuar con más claridad?", options: ["15 segundos", "90 segundos", "10 minutos"], correct: 1 },
@@ -265,6 +258,14 @@ const {
 
       const config = results ? WOUNDS_CONFIG[results.main] : null;
 
+      const radarData = results ? [
+        { subject: "Rechazo", value: results.counts.rechazo },
+        { subject: "Abandono", value: results.counts.abandono },
+        { subject: "Humillación", value: results.counts.humillacion },
+        { subject: "Traición", value: results.counts.traicion },
+        { subject: "Injusticia", value: results.counts.injusticia }
+      ] : [];
+
       function renderHome() {
         return (
           <div className="space-y-10 fade-in">
@@ -351,15 +352,6 @@ const {
       function renderResults() {
         return (
           <div className="space-y-10 fade-in text-center">
-            <div className="h-80 bg-slate-50 rounded-3xl p-6 border mb-8">
-  <ResponsiveContainer width="100%" height="100%">
-    <RadarChart data={radarData}>
-      <PolarGrid />
-      <PolarAngleAxis dataKey="subject" />
-      <Radar dataKey="value" stroke="#6366f1" fill="#6366f1" fillOpacity={0.6}/>
-    </RadarChart>
-  </ResponsiveContainer>
-</div>
             <div className="space-y-3">
               <h2 className="text-5xl md:text-6xl font-black uppercase italic tracking-tighter text-slate-900 leading-none">
                 HERIDA DE {config.name}
@@ -372,6 +364,21 @@ const {
                   Respuesta: {config.survivalResponse}
                 </span>
               </div>
+            </div>
+
+            <div className="h-80 bg-slate-50 rounded-3xl p-6 border mb-8">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart data={radarData}>
+                  <PolarGrid />
+                  <PolarAngleAxis dataKey="subject" />
+                  <Radar
+                    dataKey="value"
+                    stroke={config.color}
+                    fill={config.color}
+                    fillOpacity={0.55}
+                  />
+                </RadarChart>
+              </ResponsiveContainer>
             </div>
 
             <div className="bg-slate-50 rounded-[3rem] p-8 border-2 border-slate-100 text-left">
@@ -578,7 +585,6 @@ const {
   </script>
 </body>
 </html>
-
 
 
 
