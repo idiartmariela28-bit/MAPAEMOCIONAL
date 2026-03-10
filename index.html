@@ -31,6 +31,36 @@ const {
   PolarAngleAxis,
   ResponsiveContainer
 } = Recharts;
+    function RadarSimple({ counts }) {
+  const data = [
+    { label: "Rechazo", value: counts?.rechazo || 0 },
+    { label: "Abandono", value: counts?.abandono || 0 },
+    { label: "Humillación", value: counts?.humillacion || 0 },
+    { label: "Traición", value: counts?.traicion || 0 },
+    { label: "Injusticia", value: counts?.injusticia || 0 }
+  ];
+
+  return (
+    <div className="p-6 bg-slate-50 rounded-3xl border mb-6">
+      <div className="text-sm font-bold mb-4">Radar emocional</div>
+      {data.map(d => (
+        <div key={d.label} className="mb-2">
+          <div className="flex justify-between text-sm">
+            <span>{d.label}</span>
+            <span>{d.value}</span>
+          </div>
+          <div className="w-full h-2 bg-slate-200 rounded">
+            <div
+              className="h-2 bg-indigo-500 rounded"
+              style={{ width: `${d.value * 10}%` }}
+            ></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 
     const WOUNDS_CONFIG = {
       const radarData = results ? [
@@ -578,6 +608,7 @@ const {
   </script>
 </body>
 </html>
+
 
 
 
