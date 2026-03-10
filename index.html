@@ -325,10 +325,7 @@
               Herida dominante
             </div>
             <div className="text-2xl font-black text-slate-900">{main.name}</div>
-            <div
-              className="mt-3 h-2 rounded-full"
-              style={{ backgroundColor: main.color }}
-            ></div>
+            <div className="mt-3 h-2 rounded-full" style={{ backgroundColor: main.color }}></div>
             <div className="mt-3 text-sm font-bold text-slate-500">
               Puntaje: {main.value}/10
             </div>
@@ -339,10 +336,7 @@
               Herida secundaria
             </div>
             <div className="text-2xl font-black text-slate-900">{secondary.name}</div>
-            <div
-              className="mt-3 h-2 rounded-full"
-              style={{ backgroundColor: secondary.color }}
-            ></div>
+            <div className="mt-3 h-2 rounded-full" style={{ backgroundColor: secondary.color }}></div>
             <div className="mt-3 text-sm font-bold text-slate-500">
               Puntaje: {secondary.value}/10
             </div>
@@ -530,6 +524,45 @@
             <RadarSimple counts={results.counts} />
 
             <ResultSummary counts={results.counts} />
+
+            <div className="bg-indigo-50 border border-indigo-100 rounded-[3rem] p-8 md:p-10 text-center space-y-5 shadow-sm">
+              <div className="text-xs font-black uppercase tracking-widest text-indigo-600">
+                Comprensión clave
+              </div>
+              <h3 className="text-3xl md:text-4xl font-black text-slate-900 leading-tight">
+                Tu mente no tiene un problema de ansiedad.
+              </h3>
+              <p className="text-xl font-bold text-indigo-600">
+                Tiene un problema de sobreprocesamiento.
+              </p>
+              <p className="text-slate-600 text-lg leading-relaxed font-medium">
+                Cuando tu mente analiza demasiado, activa una y otra vez las mismas heridas emocionales.
+                No es la situación la que te atrapa. Es el <strong>bucle mental</strong> que la repite.
+              </p>
+            </div>
+
+            <div className="bg-slate-900 text-white rounded-[3rem] p-8 md:p-10 shadow-2xl text-center space-y-5">
+              <div className="text-sm font-black uppercase tracking-widest text-indigo-300">
+                Siguiente paso
+              </div>
+
+              <h3 className="text-3xl font-black leading-tight">
+                Si querés dejar de repetir este patrón, empezá por apagar el bucle mental que lo alimenta.
+              </h3>
+
+              <p className="text-indigo-100 text-lg leading-relaxed font-medium">
+                Por eso creé el <strong>Sistema Detox de Sobrepensamiento</strong>, un método simple para frenar el ruido mental y recuperar claridad.
+              </p>
+
+              <a
+                href="https://wa.me/5491134822628?text=Hola,%20hice%20el%20test%20del%20mapa%20emocional%20y%20quiero%20conocer%20el%20Sistema%20Detox%20de%20Sobrepensamiento"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-white text-slate-900 font-black px-8 py-4 rounded-[1.5rem] shadow-lg hover:bg-slate-100 transition-all"
+              >
+                Quiero el Sistema Detox
+              </a>
+            </div>
 
             <div className="grid gap-4 pb-8">
               <ActionButton onClick={() => setView("longExplanation")} variant="secondary">
