@@ -8,7 +8,6 @@
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
   <style>
     body { background: #f8fafc; }
     .fade-in { animation: fadeIn .3s ease; }
@@ -23,14 +22,6 @@
 
   <script type="text/babel">
     const { useState, useEffect } = React;
-
-    const {
-      RadarChart,
-      Radar,
-      PolarGrid,
-      PolarAngleAxis,
-      ResponsiveContainer
-    } = Recharts;
 
     const WOUNDS_CONFIG = {
       rechazo: {
@@ -190,6 +181,151 @@
       );
     }
 
+    function RadarSimple({ counts }) {
+      const data = [
+        { label: "Rechazo", value: counts?.rechazo || 0, color: "#6366f1" },
+        { label: "Abandono", value: counts?.abandono || 0, color: "#ec4899" },
+        { label: "Humillación", value: counts?.humillacion || 0, color: "#f59e0b" },
+        { label: "Traición", value: counts?.traicion || 0, color: "#ef4444" },
+        { label: "Injusticia", value: counts?.injusticia || 0, color: "#10b981" }
+      ];
+
+      const size = 320;
+      const cx = 160;
+      const cy = 160;
+      const maxR = 95;
+      const levels = 5;
+      const maxValue = 10;
+
+      function pointFor(i, value) {
+        const angle = (-Math.PI / 2) + (i * 2 * Math.PI / data.length);
+        const r = (value / maxValue) * maxR;
+        return {
+          x: cx + Math.cos(angle) * r,
+          y: cy + Math.sin(angle) * r
+        };
+      }
+
+      const polygonPoints = data.map((d, i) => {
+        const p = pointFor(i, d.value);
+        return `${p.x},${p.y}`;
+      }).join(" ");
+
+      return (
+        <div className="bg-slate-50 rounded-[3rem] p-6 border-2 border-slate-100 shadow-sm">
+          <div className="text-left mb-4">
+            <div className="text-sm font-black uppercase tracking-widest text-slate-400">
+              Tu huella emocional
+            </div>
+            <div className="text-xl font-black text-slate-900">
+              Gráfico radar de heridas
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <svg viewBox="0 0 320 320" className="w-full max-w-[320px] h-auto">
+              {[1, 2, 3, 4, 5].map((level) => {
+                const r = (level / levels) * maxR;
+                const points = data.map((_, i) => {
+                  const angle = (-Math.PI / 2) + (i * 2 * Math.PI / data.length);
+                  const x = cx + Math.cos(angle) * r;
+                  const y = cy + Math.sin(angle) * r;
+                  return `${x},${y}`;
+                }).join(" ");
+                return (
+                  <polygon
+                    key={level}
+                    points={points}
+                    fill="none"
+                    stroke="#cbd5e1"
+                    strokeWidth="1"
+                  />
+                );
+              })}
+
+              {data.map((_, i) => {
+                const p = pointFor(i, maxValue);
+                return (
+                  <line
+                    key={i}
+                    x1={cx}
+                    y1={cy}
+                    x2={p.x}
+                    y2={p.y}
+                    stroke="#cbd5e1"
+                    strokeWidth="1"
+                  />
+                );
+              })}
+
+              <polygon
+                points={polygonPoints}
+                fill="#6366f1"
+                fillOpacity="0.28"
+                stroke="#6366f1"
+                strokeWidth="3"
+              />
+
+              {data.map((d, i) => {
+                const p = pointFor(i, d.value);
+                return (
+                  <circle
+                    key={d.label}
+                    cx={p.x}
+                    cy={p.y}
+                    r="5"
+                    fill="#6366f1"
+                  />
+                );
+              })}
+
+              {data.map((d, i) => {
+                const angle = (-Math.PI / 2) + (i * 2 * Math.PI / data.length);
+                const labelR = maxR + 28;
+                const x = cx + Math.cos(angle) * labelR;
+                const y = cy + Math.sin(angle) * labelR;
+
+                return (
+                  <text
+                    key={d.label}
+                    x={x}
+                    y={y}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    fontSize="12"
+                    fontWeight="700"
+                    fill="#475569"
+                  >
+                    {d.label}
+                  </text>
+                );
+              })}
+            </svg>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 mt-5">
+            {data.map((d) => (
+              <div key={d.label}>
+                <div className="flex justify-between text-sm font-bold text-slate-600 mb-1">
+                  <span>{d.label}</span>
+                  <span>{d.value}/10</span>
+                </div>
+                <div className="w-full h-3 bg-white rounded-full overflow-hidden border border-slate-200">
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      width: `${(d.value / 10) * 100}%`,
+                      backgroundColor: d.color
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
     function App() {
       const [view, setView] = useState("home");
       const [scope, setScope] = useState(null);
@@ -234,11 +370,7 @@
           newAnswers.forEach(ans => counts[ans]++);
           const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
           const main = sorted[0][0];
-          const finalRes = {
-            main,
-            counts,
-            scope: scope
-          };
+          const finalRes = { main, counts, scope };
           setResults(finalRes);
           localStorage.setItem("mapa_emocional_resultado", JSON.stringify(finalRes));
           setView("results");
@@ -257,14 +389,6 @@
       }
 
       const config = results ? WOUNDS_CONFIG[results.main] : null;
-
-      const radarData = results ? [
-        { subject: "Rechazo", value: results.counts.rechazo },
-        { subject: "Abandono", value: results.counts.abandono },
-        { subject: "Humillación", value: results.counts.humillacion },
-        { subject: "Traición", value: results.counts.traicion },
-        { subject: "Injusticia", value: results.counts.injusticia }
-      ] : [];
 
       function renderHome() {
         return (
@@ -366,20 +490,7 @@
               </div>
             </div>
 
-            <div className="h-80 bg-slate-50 rounded-3xl p-6 border mb-8">
-              <ResponsiveContainer width="100%" height="100%">
-                <RadarChart data={radarData}>
-                  <PolarGrid />
-                  <PolarAngleAxis dataKey="subject" />
-                  <Radar
-                    dataKey="value"
-                    stroke={config.color}
-                    fill={config.color}
-                    fillOpacity={0.55}
-                  />
-                </RadarChart>
-              </ResponsiveContainer>
-            </div>
+            <RadarSimple counts={results.counts} />
 
             <div className="bg-slate-50 rounded-[3rem] p-8 border-2 border-slate-100 text-left">
               <div className="font-black text-slate-900 text-lg mb-4">Intensidad detectada</div>
@@ -585,7 +696,4 @@
   </script>
 </body>
 </html>
-
-
-
 
